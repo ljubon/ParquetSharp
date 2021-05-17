@@ -1,0 +1,5 @@
+[*.{cs,vb}]
+dotnet_diagnostic.IDE0055.severity = warning
+
+# IDE0040: Accessibility modifiers required (escalated to a build warning)
+dotnet_diagnostic.IDE0040.severity = warning

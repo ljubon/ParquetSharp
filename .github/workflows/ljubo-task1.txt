@@ -1,0 +1,16 @@
+Here are the projects that I would like you to look at:
+
+https://github.com/G-Research/ParquetSharp
+https://github.com/G-Research/consuldotnet
+https://github.com/m4rs-mt/ILGPU
+https://github.com/m4rs-mt/ILGPU.Algorithms
+
+I would like you to familiarise yourself with their GitHub Actions workflows, 
+understand what it takes to build them locally, to run their tests, how they are released, etc.
+We will discuss on Wednesday what you found out, 
+anything that would be unclear to you, or improvements that you would like to suggest.
+
+The other tasks we discussed are:
+- add dotnet-format support to ParquetSharp (automatic code formatting tool — the goal is to ensure that code formatting is always consistent between devs — have a look at consuldotnet to see how we've done it)
+- make sure that the `deploy-gh-pages` job does not run when there is nothing to do on https://github.com/G-Research/armada
+- also for armada, make sure that unit tests do not run for the `gh-pages` branch
