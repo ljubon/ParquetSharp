@@ -8,29 +8,18 @@ namespace ParquetSharp
     /// <summary>
     /// C# types to Parquet physical types write conversion logic.
     /// </summary>
-    internal static class LogicalWrite<TLogical, TPhysical>
-        where TPhysical : unmanaged
+    internal static class LogicalWrite<TLogical, TPhysical> where TPhysical : unmanaged
     {
         public delegate void Converter(ReadOnlySpan<TLogical> source, Span<short> defLevels, Span<TPhysical> destination, short nullLevel);
 
         public static Converter GetConverter(LogicalType logicalType, int scale, ByteBuffer? byteBuffer)
         {
-            if (typeof(TLogical) == typeof(bool) ||
-                typeof(TLogical) == typeof(int) ||
-                typeof(TLogical) == typeof(long) ||
-                typeof(TLogical) == typeof(Int96) ||
-                typeof(TLogical) == typeof(float) ||
-                typeof(TLogical) == typeof(double))
+            if (typeof(TLogical) == typeof(bool) || typeof(TLogical) == typeof(int) || typeof(TLogical) == typeof(long) || typeof(TLogical) == typeof(Int96) || typeof(TLogical) == typeof(float) || typeof(TLogical) == typeof(double))
             {
                 return (Converter) (Delegate) (LogicalWrite<TPhysical, TPhysical>.Converter) ((s, dl, d, nl) => ConvertNative(s, d));
             }
 
-            if (typeof(TLogical) == typeof(bool?) ||
-                typeof(TLogical) == typeof(int?) ||
-                typeof(TLogical) == typeof(long?) ||
-                typeof(TLogical) == typeof(Int96?) ||
-                typeof(TLogical) == typeof(float?) ||
-                typeof(TLogical) == typeof(double?))
+            if (typeof(TLogical) == typeof(bool?) || typeof(TLogical) == typeof(int?) || typeof(TLogical) == typeof(long?) || typeof(TLogical) == typeof(Int96?) || typeof(TLogical) == typeof(float?) || typeof(TLogical) == typeof(double?))
             {
                 return (Converter) (Delegate) (LogicalWrite<TPhysical?, TPhysical>.Converter) ConvertNative;
             }
@@ -223,8 +212,7 @@ namespace ParquetSharp
                 if (value == null)
                 {
                     defLevels[i] = nullLevel;
-                }
-                else
+                } else
                 {
                     destination[dst++] = value.Value;
                     defLevels[i] = (short) (nullLevel + 1);
@@ -248,8 +236,7 @@ namespace ParquetSharp
                 if (value == null)
                 {
                     defLevels[i] = nullLevel;
-                }
-                else
+                } else
                 {
                     destination[dst++] = value.Value;
                     defLevels[i] = (short) (nullLevel + 1);
@@ -273,8 +260,7 @@ namespace ParquetSharp
                 if (value == null)
                 {
                     defLevels[i] = nullLevel;
-                }
-                else
+                } else
                 {
                     destination[dst++] = value.Value;
                     defLevels[i] = (short) (nullLevel + 1);
@@ -298,8 +284,7 @@ namespace ParquetSharp
                 if (value == null)
                 {
                     defLevels[i] = nullLevel;
-                }
-                else
+                } else
                 {
                     destination[dst++] = value.Value;
                     defLevels[i] = (short) (nullLevel + 1);
@@ -323,8 +308,7 @@ namespace ParquetSharp
                 if (value == null)
                 {
                     defLevels[i] = nullLevel;
-                }
-                else
+                } else
                 {
                     destination[dst++] = value.Value;
                     defLevels[i] = (short) (nullLevel + 1);
@@ -348,8 +332,7 @@ namespace ParquetSharp
                 if (value == null)
                 {
                     defLevels[i] = nullLevel;
-                }
-                else
+                } else
                 {
                     destination[dst++] = LogicalWrite.FromDecimal(value.Value, multiplier, byteBuffer);
                     defLevels[i] = (short) (nullLevel + 1);
@@ -373,8 +356,7 @@ namespace ParquetSharp
                 if (value == null)
                 {
                     defLevels[i] = nullLevel;
-                }
-                else
+                } else
                 {
                     destination[dst++] = LogicalWrite.FromUuid(value.Value, byteBuffer);
                     defLevels[i] = (short) (nullLevel + 1);
@@ -398,8 +380,7 @@ namespace ParquetSharp
                 if (value == null)
                 {
                     defLevels[i] = nullLevel;
-                }
-                else
+                } else
                 {
                     destination[dst++] = LogicalWrite.FromDateTimeMicros(value.Value);
                     defLevels[i] = (short) (nullLevel + 1);
@@ -423,8 +404,7 @@ namespace ParquetSharp
                 if (value == null)
                 {
                     defLevels[i] = nullLevel;
-                }
-                else
+                } else
                 {
                     destination[dst++] = LogicalWrite.FromDateTimeMillis(value.Value);
                     defLevels[i] = (short) (nullLevel + 1);
@@ -448,8 +428,7 @@ namespace ParquetSharp
                 if (value == null)
                 {
                     defLevels[i] = nullLevel;
-                }
-                else
+                } else
                 {
                     destination[dst++] = LogicalWrite.FromTimeSpanMicros(value.Value);
                     defLevels[i] = (short) (nullLevel + 1);
@@ -473,8 +452,7 @@ namespace ParquetSharp
                 if (value == null)
                 {
                     defLevels[i] = nullLevel;
-                }
-                else
+                } else
                 {
                     destination[dst++] = LogicalWrite.FromTimeSpanMillis(value.Value);
                     defLevels[i] = (short) (nullLevel + 1);
@@ -495,8 +473,7 @@ namespace ParquetSharp
                     }
 
                     defLevels[i] = nullLevel;
-                }
-                else
+                } else
                 {
                     destination[dst++] = LogicalWrite.FromString(value, byteBuffer);
                     defLevels[i] = (short) (nullLevel + 1);
@@ -517,16 +494,13 @@ namespace ParquetSharp
                     }
 
                     defLevels[i] = nullLevel;
-                }
-                else
+                } else
                 {
                     destination[dst++] = LogicalWrite.FromByteArray(value, byteBuffer);
                     defLevels[i] = (short) (nullLevel + 1);
                 }
             }
         }
-
-
     }
 
     /// <summary>
@@ -633,8 +607,7 @@ namespace ParquetSharp
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static unsafe FixedLenByteArray FromFixedLength<TValue>(in TValue value, ByteBuffer byteBuffer)
-            where TValue : unmanaged
+        private static unsafe FixedLenByteArray FromFixedLength<TValue>(in TValue value, ByteBuffer byteBuffer) where TValue : unmanaged
         {
             var byteArray = byteBuffer.Allocate(sizeof(TValue));
             *(TValue*) byteArray.Pointer = value;

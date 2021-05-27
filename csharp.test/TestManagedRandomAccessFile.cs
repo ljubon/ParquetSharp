@@ -60,8 +60,7 @@ namespace ParquetSharp.Test
                 using var columnReader = groupReader.Column(0).LogicalReader<int>();
 
                 Assert.AreEqual(new[] {1, 2, 3}, columnReader.ReadAll(3));
-            }
-            finally
+            } finally
             {
                 File.Delete("file.parquet");
             }
@@ -79,9 +78,7 @@ namespace ParquetSharp.Test
                 }
             });
 
-            Assert.That(
-                exception?.Message,
-                Contains.Substring("this is an erroneous writer"));
+            Assert.That(exception?.Message, Contains.Substring("this is an erroneous writer"));
         }
 
         [Test]
@@ -109,13 +106,10 @@ namespace ParquetSharp.Test
                 using var input = new ManagedRandomAccessFile(buffer);
                 using (new ParquetFileReader(input))
                 {
-
                 }
             });
 
-            Assert.That(
-                exception?.Message,
-                Contains.Substring("this is an erroneous reader"));
+            Assert.That(exception?.Message, Contains.Substring("this is an erroneous reader"));
         }
 
         private sealed class ErroneousReaderStream : MemoryStream

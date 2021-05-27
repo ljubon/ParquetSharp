@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
 
 namespace ParquetSharp.IO
@@ -9,8 +8,7 @@ namespace ParquetSharp.IO
     /// </summary>
     public sealed class ResizableBuffer : Buffer
     {
-        public ResizableBuffer(long initialSize = 128L)
-            : base(ExceptionInfo.Return<long, IntPtr>(initialSize, ResizableBuffer_Create))
+        public ResizableBuffer(long initialSize = 128L) : base(ExceptionInfo.Return<long, IntPtr>(initialSize, ResizableBuffer_Create))
         {
         }
 

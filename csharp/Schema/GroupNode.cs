@@ -7,13 +7,11 @@ namespace ParquetSharp.Schema
 {
     public sealed class GroupNode : Node
     {
-        public GroupNode(string name, Repetition repetition, IReadOnlyList<Node> fields, LogicalType? logicalType = null)
-            : this(Make(name, repetition, fields, logicalType))
+        public GroupNode(string name, Repetition repetition, IReadOnlyList<Node> fields, LogicalType? logicalType = null) : this(Make(name, repetition, fields, logicalType))
         {
         }
 
-        internal GroupNode(IntPtr handle) 
-            : base(handle)
+        internal GroupNode(IntPtr handle) : base(handle)
         {
         }
 
@@ -37,11 +35,7 @@ namespace ParquetSharp.Schema
 
         public override Node DeepClone()
         {
-            return new GroupNode(
-                Name,
-                Repetition,
-                Fields.Select(f => f.DeepClone()).ToArray(),
-                LogicalType is NoneLogicalType ? null : LogicalType);
+            return new GroupNode(Name, Repetition, Fields.Select(f => f.DeepClone()).ToArray(), LogicalType is NoneLogicalType ? null : LogicalType);
         }
 
         private static unsafe IntPtr Make(string name, Repetition repetition, IReadOnlyList<Node> fields, LogicalType? logicalType)
@@ -58,8 +52,7 @@ namespace ParquetSharp.Schema
         }
 
         [DllImport(ParquetDll.Name, CharSet = CharSet.Ansi)]
-        private static extern IntPtr GroupNode_Make(
-            string name, Repetition repetition, IntPtr fields, int numFields, IntPtr logicalType, out IntPtr groupNode);
+        private static extern IntPtr GroupNode_Make(string name, Repetition repetition, IntPtr fields, int numFields, IntPtr logicalType, out IntPtr groupNode);
 
         [DllImport(ParquetDll.Name)]
         private static extern IntPtr GroupNode_Field(IntPtr groupNode, int i, out IntPtr field);

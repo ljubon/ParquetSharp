@@ -1,5 +1,4 @@
-﻿
-//#define DUMP_EXPRESSION_TREES // uncomment in to get a dump on Console of the expression trees being created.
+﻿//#define DUMP_EXPRESSION_TREES // uncomment in to get a dump on Console of the expression trees being created.
 
 using System;
 using System.Collections.Generic;
@@ -37,55 +36,25 @@ namespace ParquetSharp.Test
         [Test]
         public static void TestRoundtrip()
         {
-            TestRoundtrip(new[]
-            {
-                (123, 3.14f, new DateTime(1981, 06, 10)),
-                (456, 1.27f, new DateTime(1987, 03, 16)),
-                (789, 6.66f, new DateTime(2018, 05, 02))
-            });
+            TestRoundtrip(new[] {(123, 3.14f, new DateTime(1981, 06, 10)), (456, 1.27f, new DateTime(1987, 03, 16)), (789, 6.66f, new DateTime(2018, 05, 02))});
 
-            TestRoundtrip(new[]
-            {
-                Tuple.Create(123, 3.14f, new DateTime(1981, 06, 10)),
-                Tuple.Create(456, 1.27f, new DateTime(1987, 03, 16)),
-                Tuple.Create(789, 6.66f, new DateTime(2018, 05, 02))
-            });
+            TestRoundtrip(new[] {Tuple.Create(123, 3.14f, new DateTime(1981, 06, 10)), Tuple.Create(456, 1.27f, new DateTime(1987, 03, 16)), Tuple.Create(789, 6.66f, new DateTime(2018, 05, 02))});
 
-            TestRoundtrip(new[]
-            {
-                new Row1 {A = 123, B = 3.14f, C = new DateTime(1981, 06, 10), D = 123.1M},
-                new Row1 {A = 456, B = 1.27f, C = new DateTime(1987, 03, 16), D = 456.12M},
-                new Row1 {A = 789, B = 6.66f, C = new DateTime(2018, 05, 02), D = 789.123M}
-            });
+            TestRoundtrip(new[] {new Row1 {A = 123, B = 3.14f, C = new DateTime(1981, 06, 10), D = 123.1M}, new Row1 {A = 456, B = 1.27f, C = new DateTime(1987, 03, 16), D = 456.12M}, new Row1 {A = 789, B = 6.66f, C = new DateTime(2018, 05, 02), D = 789.123M}});
 
-            TestRoundtrip(new[]
-            {
-                new Row2 {A = 123, B = 3.14f, C = new DateTime(1981, 06, 10), D = 123.1M},
-                new Row2 {A = 456, B = 1.27f, C = new DateTime(1987, 03, 16), D = 456.12M},
-                new Row2 {A = 789, B = 6.66f, C = new DateTime(2018, 05, 02), D = 789.123M}
-            });
+            TestRoundtrip(new[] {new Row2 {A = 123, B = 3.14f, C = new DateTime(1981, 06, 10), D = 123.1M}, new Row2 {A = 456, B = 1.27f, C = new DateTime(1987, 03, 16), D = 456.12M}, new Row2 {A = 789, B = 6.66f, C = new DateTime(2018, 05, 02), D = 789.123M}});
         }
 
         [Test]
         public static void TestMappedToColumnAttributeOnRead()
         {
-            TestRoundtripMapped<Row1, MappedRow1>(new[]
-            {
-                new Row1 {A = 123, B = 3.14f, C = new DateTime(1981, 06, 10), D = 123.1M},
-                new Row1 {A = 456, B = 1.27f, C = new DateTime(1987, 03, 16), D = 456.12M},
-                new Row1 {A = 789, B = 6.66f, C = new DateTime(2018, 05, 02), D = 789.123M}
-            });
+            TestRoundtripMapped<Row1, MappedRow1>(new[] {new Row1 {A = 123, B = 3.14f, C = new DateTime(1981, 06, 10), D = 123.1M}, new Row1 {A = 456, B = 1.27f, C = new DateTime(1987, 03, 16), D = 456.12M}, new Row1 {A = 789, B = 6.66f, C = new DateTime(2018, 05, 02), D = 789.123M}});
         }
 
         [Test]
         public static void TestMappedToColumnAttributeOnWrite()
         {
-            TestRoundtripMapped<MappedRow2, MappedRow1>(new[]
-            {
-                new MappedRow2 {Q = 123, R = 3.14f, S = new DateTime(1981, 06, 10), T = 123.1M},
-                new MappedRow2 {Q = 456, R = 1.27f, S = new DateTime(1987, 03, 16), T = 456.12M},
-                new MappedRow2 {Q = 789, R = 6.66f, S = new DateTime(2018, 05, 02), T = 789.123M}
-            });
+            TestRoundtripMapped<MappedRow2, MappedRow1>(new[] {new MappedRow2 {Q = 123, R = 3.14f, S = new DateTime(1981, 06, 10), T = 123.1M}, new MappedRow2 {Q = 456, R = 1.27f, S = new DateTime(1987, 03, 16), T = 456.12M}, new MappedRow2 {Q = 789, R = 6.66f, S = new DateTime(2018, 05, 02), T = 789.123M}});
         }
 
         [Test]
@@ -125,14 +94,15 @@ namespace ParquetSharp.Test
         }
 
         [Test]
-        public static void TestCompressionArgument([Values(Compression.Uncompressed, Compression.Brotli)] Compression compression)
+        public static void TestCompressionArgument([Values(Compression.Uncompressed, Compression.Brotli)]
+            Compression compression)
         {
             using var buffer = new ResizableBuffer();
-            
+
             using (var outputStream = new BufferOutputStream(buffer))
             {
                 using var writer = ParquetFile.CreateRowWriter<(int, float)>(outputStream, compression: compression);
-                
+
                 writer.WriteRows(new[] {(42, 3.14f)});
                 writer.Close();
             }
@@ -162,19 +132,14 @@ namespace ParquetSharp.Test
         {
             RoundTripAndCompare(rows, rows, columnNames: null);
 
-            var columnNames =
-                Enumerable.Range(1, typeof(TTuple).GetFields().Length + typeof(TTuple).GetProperties().Length)
-                          .Select(x => $"Col{x}")
-                          .ToArray();
-            
+            var columnNames = Enumerable.Range(1, typeof(TTuple).GetFields().Length + typeof(TTuple).GetProperties().Length).Select(x => $"Col{x}").ToArray();
+
             RoundTripAndCompare(rows, rows, columnNames);
         }
 
         private static void TestRoundtripMapped<TTupleWrite, TTupleRead>(TTupleWrite[] rows)
         {
-            var expectedRows = rows.Select(
-                r => (TTupleRead) (Activator.CreateInstance(typeof(TTupleRead), r) ?? throw new Exception("create instance failed"))
-            );
+            var expectedRows = rows.Select(r => (TTupleRead) (Activator.CreateInstance(typeof(TTupleRead), r) ?? throw new Exception("create instance failed")));
             RoundTripAndCompare(rows, expectedRows, columnNames: null);
         }
 
@@ -203,8 +168,7 @@ namespace ParquetSharp.Test
             public float B;
             public DateTime C;
 
-            [ParquetDecimalScale(3)]
-            public decimal D;
+            [ParquetDecimalScale(3)] public decimal D;
 
             public bool Equals(Row1? other)
             {
@@ -220,15 +184,14 @@ namespace ParquetSharp.Test
             public float B { get; set; }
             public DateTime C { get; set; }
 
-            [ParquetDecimalScale(3)]
-            public decimal D { get; set; }
+            [ParquetDecimalScale(3)] public decimal D { get; set; }
         }
 
         private struct MappedRow1
         {
             // ReSharper disable once UnusedMember.Local
             // ReSharper disable once UnusedMember.Global
-            public MappedRow1(Row1 r) 
+            public MappedRow1(Row1 r)
             {
                 A = r.A;
                 B = r.B;
@@ -238,7 +201,7 @@ namespace ParquetSharp.Test
 
             // ReSharper disable once UnusedMember.Local
             // ReSharper disable once UnusedMember.Global
-            public MappedRow1(MappedRow2 r) 
+            public MappedRow1(MappedRow2 r)
             {
                 A = r.Q;
                 B = r.R;
@@ -246,14 +209,11 @@ namespace ParquetSharp.Test
                 D = r.T;
             }
 
-            [MapToColumn("B")]
-            public float B;
+            [MapToColumn("B")] public float B;
 
-            [MapToColumn("C")]
-            public DateTime C;
+            [MapToColumn("C")] public DateTime C;
 
-            [MapToColumn("A")]
-            public int A;
+            [MapToColumn("A")] public int A;
 
             [MapToColumn("D"), ParquetDecimalScale(3)]
             public decimal D;
@@ -261,14 +221,11 @@ namespace ParquetSharp.Test
 
         private struct MappedRow2
         {
-            [MapToColumn("A")]
-            public int Q;
+            [MapToColumn("A")] public int Q;
 
-            [MapToColumn("B")]
-            public float R;
+            [MapToColumn("B")] public float R;
 
-            [MapToColumn("C")]
-            public DateTime S;
+            [MapToColumn("C")] public DateTime S;
 
             [MapToColumn("D"), ParquetDecimalScale(3)]
             public decimal T;

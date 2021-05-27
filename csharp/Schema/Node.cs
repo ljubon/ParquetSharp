@@ -20,8 +20,7 @@ namespace ParquetSharp.Schema
             Handle.Dispose();
         }
 
-        [Obsolete("Use FieldId instead")]
-        public int Id => FieldId;
+        [Obsolete("Use FieldId instead")] public int Id => FieldId;
 
         public int FieldId => ExceptionInfo.Return<int>(Handle, Node_Field_Id);
         public LogicalType LogicalType => LogicalType.Create(ExceptionInfo.Return<IntPtr>(Handle, Node_Logical_Type));

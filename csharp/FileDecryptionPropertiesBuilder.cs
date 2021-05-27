@@ -19,7 +19,7 @@ namespace ParquetSharp
         {
             _handle.Dispose();
         }
-        
+
         public FileDecryptionPropertiesBuilder FooterKey(byte[] footerKey)
         {
             var footerAesKey = new AesKey(footerKey);
@@ -43,14 +43,8 @@ namespace ParquetSharp
 
             try
             {
-                ExceptionInfo.Check(FileDecryptionPropertiesBuilder_Aad_Prefix_Verifier(
-                    _handle.IntPtr,
-                    gcHandle,
-                    ParquetSharp.AadPrefixVerifier.FreeGcHandleCallback,
-                    ParquetSharp.AadPrefixVerifier.VerifyFuncCallback));
-            }
-
-            catch
+                ExceptionInfo.Check(FileDecryptionPropertiesBuilder_Aad_Prefix_Verifier(_handle.IntPtr, gcHandle, ParquetSharp.AadPrefixVerifier.FreeGcHandleCallback, ParquetSharp.AadPrefixVerifier.VerifyFuncCallback));
+            } catch
             {
                 ParquetSharp.AadPrefixVerifier.FreeGcHandleCallback(gcHandle);
                 throw;
@@ -68,14 +62,8 @@ namespace ParquetSharp
 
             try
             {
-                ExceptionInfo.Check(FileDecryptionPropertiesBuilder_Key_Retriever(
-                    _handle.IntPtr,
-                    gcHandle,
-                    DecryptionKeyRetriever.FreeGcHandleCallback,
-                    DecryptionKeyRetriever.GetKeyFuncCallback));
-            }
-
-            catch
+                ExceptionInfo.Check(FileDecryptionPropertiesBuilder_Key_Retriever(_handle.IntPtr, gcHandle, DecryptionKeyRetriever.FreeGcHandleCallback, DecryptionKeyRetriever.GetKeyFuncCallback));
+            } catch
             {
                 DecryptionKeyRetriever.FreeGcHandleCallback(gcHandle);
                 throw;
@@ -123,11 +111,7 @@ namespace ParquetSharp
         private static extern IntPtr FileDecryptionPropertiesBuilder_Column_Keys(IntPtr builder, IntPtr[] columnDecryptionProperties, int numProperties);
 
         [DllImport(ParquetDll.Name)]
-        private static extern IntPtr FileDecryptionPropertiesBuilder_Key_Retriever(
-            IntPtr builder, 
-            IntPtr gcHandle,
-            DecryptionKeyRetriever.FreeGcHandleFunc freeGcHandle, 
-            DecryptionKeyRetriever.GetKeyFunc getKey);
+        private static extern IntPtr FileDecryptionPropertiesBuilder_Key_Retriever(IntPtr builder, IntPtr gcHandle, DecryptionKeyRetriever.FreeGcHandleFunc freeGcHandle, DecryptionKeyRetriever.GetKeyFunc getKey);
 
         [DllImport(ParquetDll.Name)]
         private static extern IntPtr FileDecryptionPropertiesBuilder_Disable_Footer_Signature_Verification(IntPtr builder);
@@ -136,11 +120,7 @@ namespace ParquetSharp
         private static extern IntPtr FileDecryptionPropertiesBuilder_Aad_Prefix(IntPtr builder, string aadPrefix);
 
         [DllImport(ParquetDll.Name)]
-        private static extern IntPtr FileDecryptionPropertiesBuilder_Aad_Prefix_Verifier(
-            IntPtr builder,
-            IntPtr gcHandle,
-            AadPrefixVerifier.FreeGcHandleFunc freeGcHandle,
-            AadPrefixVerifier.VerifyFunc getKey);
+        private static extern IntPtr FileDecryptionPropertiesBuilder_Aad_Prefix_Verifier(IntPtr builder, IntPtr gcHandle, AadPrefixVerifier.FreeGcHandleFunc freeGcHandle, AadPrefixVerifier.VerifyFunc getKey);
 
         [DllImport(ParquetDll.Name)]
         private static extern IntPtr FileDecryptionPropertiesBuilder_Plaintext_Files_Allowed(IntPtr builder);

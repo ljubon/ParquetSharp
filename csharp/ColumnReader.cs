@@ -37,9 +37,7 @@ namespace ParquetSharp
                     default:
                         throw new NotSupportedException($"Physical type {type} is not supported");
                 }
-            }
-
-            catch
+            } catch
             {
                 parquetHandle.Dispose();
                 throw;
@@ -88,83 +86,52 @@ namespace ParquetSharp
         private static extern IntPtr ColumnReader_Type(IntPtr columnReader, out PhysicalType type);
 
         [DllImport(ParquetDll.Name)]
-        protected static extern unsafe IntPtr TypedColumnReader_ReadBatch_Bool(
-            IntPtr columnReader, long batchSize, short* defLevels, short* repLevels, bool* values, 
-            out long valuesRead, out long levelsRead);
+        protected static extern unsafe IntPtr TypedColumnReader_ReadBatch_Bool(IntPtr columnReader, long batchSize, short* defLevels, short* repLevels, bool* values, out long valuesRead, out long levelsRead);
 
         [DllImport(ParquetDll.Name)]
-        protected static extern unsafe IntPtr TypedColumnReader_ReadBatch_Int32(
-            IntPtr columnReader, long batchSize, short* defLevels, short* repLevels, int* values, 
-            out long valuesRead, out long levelsRead);
+        protected static extern unsafe IntPtr TypedColumnReader_ReadBatch_Int32(IntPtr columnReader, long batchSize, short* defLevels, short* repLevels, int* values, out long valuesRead, out long levelsRead);
 
         [DllImport(ParquetDll.Name)]
-        protected static extern unsafe IntPtr TypedColumnReader_ReadBatch_Int64(
-            IntPtr columnReader, long batchSize, short* defLevels, short* repLevels, long* values, 
-            out long valuesRead, out long levelsRead);
+        protected static extern unsafe IntPtr TypedColumnReader_ReadBatch_Int64(IntPtr columnReader, long batchSize, short* defLevels, short* repLevels, long* values, out long valuesRead, out long levelsRead);
 
         [DllImport(ParquetDll.Name)]
-        protected static extern unsafe IntPtr TypedColumnReader_ReadBatch_Int96(
-            IntPtr columnReader, long batchSize, short* defLevels, short* repLevels, Int96* values, 
-            out long valuesRead, out long levelsRead);
+        protected static extern unsafe IntPtr TypedColumnReader_ReadBatch_Int96(IntPtr columnReader, long batchSize, short* defLevels, short* repLevels, Int96* values, out long valuesRead, out long levelsRead);
 
         [DllImport(ParquetDll.Name)]
-        protected static extern unsafe IntPtr TypedColumnReader_ReadBatch_Float(
-            IntPtr columnReader, long batchSize, short* defLevels, short* repLevels, float* values, 
-            out long valuesRead, out long levelsRead);
+        protected static extern unsafe IntPtr TypedColumnReader_ReadBatch_Float(IntPtr columnReader, long batchSize, short* defLevels, short* repLevels, float* values, out long valuesRead, out long levelsRead);
 
         [DllImport(ParquetDll.Name)]
-        protected static extern unsafe IntPtr TypedColumnReader_ReadBatch_Double(
-            IntPtr columnReader, long batchSize, short* defLevels, short* repLevels, double* values, 
-            out long valuesRead, out long levelsRead);
+        protected static extern unsafe IntPtr TypedColumnReader_ReadBatch_Double(IntPtr columnReader, long batchSize, short* defLevels, short* repLevels, double* values, out long valuesRead, out long levelsRead);
 
         [DllImport(ParquetDll.Name)]
-        protected static extern unsafe IntPtr TypedColumnReader_ReadBatch_ByteArray(
-            IntPtr columnReader, long batchSize, short* defLevels, short* repLevels, ByteArray* values, 
-            out long valuesRead, out long levelsRead);
+        protected static extern unsafe IntPtr TypedColumnReader_ReadBatch_ByteArray(IntPtr columnReader, long batchSize, short* defLevels, short* repLevels, ByteArray* values, out long valuesRead, out long levelsRead);
 
         [DllImport(ParquetDll.Name)]
-        protected static extern unsafe IntPtr TypedColumnReader_ReadBatch_FixedLenByteArray(
-            IntPtr columnReader, long batchSize, short* defLevels, short* repLevels, FixedLenByteArray* values, out long valuesRead, out long levelsRead);
+        protected static extern unsafe IntPtr TypedColumnReader_ReadBatch_FixedLenByteArray(IntPtr columnReader, long batchSize, short* defLevels, short* repLevels, FixedLenByteArray* values, out long valuesRead, out long levelsRead);
 
         [DllImport(ParquetDll.Name)]
-        protected static extern unsafe IntPtr TypedColumnReader_ReadBatchSpaced_Bool(
-            IntPtr columnReader, long batchSize, short* defLevels, short* repLevels, bool* values, byte* validBits, long validBitsOffset, 
-            out long levelsRead, out long valuesRead, out long nullCount, out long returnValue);
+        protected static extern unsafe IntPtr TypedColumnReader_ReadBatchSpaced_Bool(IntPtr columnReader, long batchSize, short* defLevels, short* repLevels, bool* values, byte* validBits, long validBitsOffset, out long levelsRead, out long valuesRead, out long nullCount, out long returnValue);
 
         [DllImport(ParquetDll.Name)]
-        protected static extern unsafe IntPtr TypedColumnReader_ReadBatchSpaced_Int32(
-            IntPtr columnReader, long batchSize, short* defLevels, short* repLevels, int* values, byte* validBits, long validBitsOffset, 
-            out long levelsRead, out long valuesRead, out long nullCount, out long returnValue);
+        protected static extern unsafe IntPtr TypedColumnReader_ReadBatchSpaced_Int32(IntPtr columnReader, long batchSize, short* defLevels, short* repLevels, int* values, byte* validBits, long validBitsOffset, out long levelsRead, out long valuesRead, out long nullCount, out long returnValue);
 
         [DllImport(ParquetDll.Name)]
-        protected static extern unsafe IntPtr TypedColumnReader_ReadBatchSpaced_Int64(
-            IntPtr columnReader, long batchSize, short* defLevels, short* repLevels, long* values, byte* validBits, long validBitsOffset, 
-            out long levelsRead, out long valuesRead, out long nullCount, out long returnValue);
+        protected static extern unsafe IntPtr TypedColumnReader_ReadBatchSpaced_Int64(IntPtr columnReader, long batchSize, short* defLevels, short* repLevels, long* values, byte* validBits, long validBitsOffset, out long levelsRead, out long valuesRead, out long nullCount, out long returnValue);
 
         [DllImport(ParquetDll.Name)]
-        protected static extern unsafe IntPtr TypedColumnReader_ReadBatchSpaced_Int96(
-            IntPtr columnReader, long batchSize, short* defLevels, short* repLevels, Int96* values, byte* validBits, long validBitsOffset, 
-            out long levelsRead, out long valuesRead, out long nullCount, out long returnValue);
+        protected static extern unsafe IntPtr TypedColumnReader_ReadBatchSpaced_Int96(IntPtr columnReader, long batchSize, short* defLevels, short* repLevels, Int96* values, byte* validBits, long validBitsOffset, out long levelsRead, out long valuesRead, out long nullCount, out long returnValue);
 
         [DllImport(ParquetDll.Name)]
-        protected static extern unsafe IntPtr TypedColumnReader_ReadBatchSpaced_Float(
-            IntPtr columnReader, long batchSize, short* defLevels, short* repLevels, float* values, byte* validBits, long validBitsOffset,
-            out long levelsRead, out long valuesRead, out long nullCount, out long returnValue);
+        protected static extern unsafe IntPtr TypedColumnReader_ReadBatchSpaced_Float(IntPtr columnReader, long batchSize, short* defLevels, short* repLevels, float* values, byte* validBits, long validBitsOffset, out long levelsRead, out long valuesRead, out long nullCount, out long returnValue);
 
         [DllImport(ParquetDll.Name)]
-        protected static extern unsafe IntPtr TypedColumnReader_ReadBatchSpaced_Double(
-            IntPtr columnReader, long batchSize, short* defLevels, short* repLevels, double* values, byte* validBits, long validBitsOffset,
-            out long levelsRead, out long valuesRead, out long nullCount, out long returnValue);
+        protected static extern unsafe IntPtr TypedColumnReader_ReadBatchSpaced_Double(IntPtr columnReader, long batchSize, short* defLevels, short* repLevels, double* values, byte* validBits, long validBitsOffset, out long levelsRead, out long valuesRead, out long nullCount, out long returnValue);
 
         [DllImport(ParquetDll.Name)]
-        protected static extern unsafe IntPtr TypedColumnReader_ReadBatchSpaced_ByteArray(
-            IntPtr columnReader, long batchSize, short* defLevels, short* repLevels, ByteArray* values, byte* validBits, long validBitsOffset,
-            out long levelsRead, out long valuesRead, out long nullCount, out long returnValue);
+        protected static extern unsafe IntPtr TypedColumnReader_ReadBatchSpaced_ByteArray(IntPtr columnReader, long batchSize, short* defLevels, short* repLevels, ByteArray* values, byte* validBits, long validBitsOffset, out long levelsRead, out long valuesRead, out long nullCount, out long returnValue);
 
         [DllImport(ParquetDll.Name)]
-        protected static extern unsafe IntPtr TypedColumnReader_ReadBatchSpaced_FixedLenByteArray(
-            IntPtr columnReader, long batchSize, short* defLevels, short* repLevels, FixedLenByteArray* values, byte* validBits, long validBitsOffset, 
-            out long levelsRead, out long valuesRead, out long nullCount, out long returnValue);
+        protected static extern unsafe IntPtr TypedColumnReader_ReadBatchSpaced_FixedLenByteArray(IntPtr columnReader, long batchSize, short* defLevels, short* repLevels, FixedLenByteArray* values, byte* validBits, long validBitsOffset, out long levelsRead, out long valuesRead, out long nullCount, out long returnValue);
 
         [DllImport(ParquetDll.Name)]
         protected static extern IntPtr TypedColumnReader_Skip_Bool(IntPtr columnReader, long numRowsToSkip, out long levelsSkipped);
@@ -197,8 +164,7 @@ namespace ParquetSharp
     /// <inheritdoc />
     public sealed class ColumnReader<TValue> : ColumnReader where TValue : unmanaged
     {
-        internal ColumnReader(ParquetHandle handle, ColumnChunkMetaData columnChunkMetaData) 
-            : base(handle, columnChunkMetaData)
+        internal ColumnReader(ParquetHandle handle, ColumnChunkMetaData columnChunkMetaData) : base(handle, columnChunkMetaData)
         {
         }
 
@@ -229,64 +195,56 @@ namespace ParquetSharp
             {
                 if (type == typeof(bool))
                 {
-                    ExceptionInfo.Check(TypedColumnReader_ReadBatch_Bool(Handle.IntPtr, 
-                        batchSize, pDefLevels, pRepLevels, (bool*) pValues, out valuesRead, out var levelsRead));
+                    ExceptionInfo.Check(TypedColumnReader_ReadBatch_Bool(Handle.IntPtr, batchSize, pDefLevels, pRepLevels, (bool*) pValues, out valuesRead, out var levelsRead));
                     GC.KeepAlive(Handle);
                     return levelsRead;
                 }
 
                 if (type == typeof(int))
                 {
-                    ExceptionInfo.Check(TypedColumnReader_ReadBatch_Int32(Handle.IntPtr, 
-                        batchSize, pDefLevels, pRepLevels, (int*) pValues, out valuesRead, out var levelsRead));
+                    ExceptionInfo.Check(TypedColumnReader_ReadBatch_Int32(Handle.IntPtr, batchSize, pDefLevels, pRepLevels, (int*) pValues, out valuesRead, out var levelsRead));
                     GC.KeepAlive(Handle);
                     return levelsRead;
                 }
 
                 if (type == typeof(long))
                 {
-                    ExceptionInfo.Check(TypedColumnReader_ReadBatch_Int64(Handle.IntPtr, 
-                        batchSize, pDefLevels, pRepLevels, (long*) pValues, out valuesRead, out var levelsRead));
+                    ExceptionInfo.Check(TypedColumnReader_ReadBatch_Int64(Handle.IntPtr, batchSize, pDefLevels, pRepLevels, (long*) pValues, out valuesRead, out var levelsRead));
                     GC.KeepAlive(Handle);
                     return levelsRead;
                 }
 
                 if (type == typeof(Int96))
                 {
-                    ExceptionInfo.Check(TypedColumnReader_ReadBatch_Int96(Handle.IntPtr, 
-                        batchSize, pDefLevels, pRepLevels, (Int96*) pValues, out valuesRead, out var levelsRead));
+                    ExceptionInfo.Check(TypedColumnReader_ReadBatch_Int96(Handle.IntPtr, batchSize, pDefLevels, pRepLevels, (Int96*) pValues, out valuesRead, out var levelsRead));
                     GC.KeepAlive(Handle);
                     return levelsRead;
                 }
 
                 if (type == typeof(float))
                 {
-                    ExceptionInfo.Check(TypedColumnReader_ReadBatch_Float(Handle.IntPtr, 
-                        batchSize, pDefLevels, pRepLevels, (float*) pValues, out valuesRead, out var levelsRead));
+                    ExceptionInfo.Check(TypedColumnReader_ReadBatch_Float(Handle.IntPtr, batchSize, pDefLevels, pRepLevels, (float*) pValues, out valuesRead, out var levelsRead));
                     GC.KeepAlive(Handle);
                     return levelsRead;
                 }
 
                 if (type == typeof(double))
                 {
-                    ExceptionInfo.Check(TypedColumnReader_ReadBatch_Double(Handle.IntPtr, 
-                        batchSize, pDefLevels, pRepLevels, (double*) pValues, out valuesRead, out var levelsRead));
+                    ExceptionInfo.Check(TypedColumnReader_ReadBatch_Double(Handle.IntPtr, batchSize, pDefLevels, pRepLevels, (double*) pValues, out valuesRead, out var levelsRead));
                     GC.KeepAlive(Handle);
                     return levelsRead;
                 }
 
                 if (type == typeof(ByteArray))
                 {
-                    ExceptionInfo.Check(TypedColumnReader_ReadBatch_ByteArray(Handle.IntPtr,
-                        batchSize, pDefLevels, pRepLevels, (ByteArray*) pValues, out valuesRead, out var levelsRead));
+                    ExceptionInfo.Check(TypedColumnReader_ReadBatch_ByteArray(Handle.IntPtr, batchSize, pDefLevels, pRepLevels, (ByteArray*) pValues, out valuesRead, out var levelsRead));
                     GC.KeepAlive(Handle);
                     return levelsRead;
                 }
 
                 if (type == typeof(FixedLenByteArray))
                 {
-                    ExceptionInfo.Check(TypedColumnReader_ReadBatch_FixedLenByteArray(Handle.IntPtr, 
-                        batchSize, pDefLevels, pRepLevels, (FixedLenByteArray*) pValues, out valuesRead, out var levelsRead));
+                    ExceptionInfo.Check(TypedColumnReader_ReadBatch_FixedLenByteArray(Handle.IntPtr, batchSize, pDefLevels, pRepLevels, (FixedLenByteArray*) pValues, out valuesRead, out var levelsRead));
                     GC.KeepAlive(Handle);
                     return levelsRead;
                 }
@@ -295,9 +253,7 @@ namespace ParquetSharp
             }
         }
 
-        public unsafe long ReadBatchSpaced(
-            long batchSize, Span<short> defLevels, Span<short> repLevels, Span<TValue> values, Span<byte> validBits, long validBitsOffset, 
-            out long levelsRead, out long valuesRead, out long nullCount)
+        public unsafe long ReadBatchSpaced(long batchSize, Span<short> defLevels, Span<short> repLevels, Span<TValue> values, Span<byte> validBits, long validBitsOffset, out long levelsRead, out long valuesRead, out long nullCount)
         {
             if (values == null) throw new ArgumentNullException(nameof(values));
             if (defLevels == null) throw new ArgumentNullException(nameof(defLevels));
@@ -317,72 +273,56 @@ namespace ParquetSharp
             {
                 if (type == typeof(bool))
                 {
-                    ExceptionInfo.Check(TypedColumnReader_ReadBatchSpaced_Bool(Handle.IntPtr, 
-                        batchSize, pDefLevels, pRepLevels, (bool*) pValues, pValidBits, validBitsOffset, 
-                        out levelsRead, out valuesRead, out nullCount, out var returnValue));
+                    ExceptionInfo.Check(TypedColumnReader_ReadBatchSpaced_Bool(Handle.IntPtr, batchSize, pDefLevels, pRepLevels, (bool*) pValues, pValidBits, validBitsOffset, out levelsRead, out valuesRead, out nullCount, out var returnValue));
                     GC.KeepAlive(Handle);
                     return returnValue;
                 }
 
                 if (type == typeof(int))
                 {
-                    ExceptionInfo.Check(TypedColumnReader_ReadBatchSpaced_Int32(Handle.IntPtr, 
-                        batchSize, pDefLevels, pRepLevels, (int*) pValues, pValidBits, validBitsOffset,
-                        out levelsRead, out valuesRead, out nullCount, out var returnValue));
+                    ExceptionInfo.Check(TypedColumnReader_ReadBatchSpaced_Int32(Handle.IntPtr, batchSize, pDefLevels, pRepLevels, (int*) pValues, pValidBits, validBitsOffset, out levelsRead, out valuesRead, out nullCount, out var returnValue));
                     GC.KeepAlive(Handle);
                     return returnValue;
                 }
 
                 if (type == typeof(long))
                 {
-                    ExceptionInfo.Check(TypedColumnReader_ReadBatchSpaced_Int64(Handle.IntPtr, 
-                        batchSize, pDefLevels, pRepLevels, (long*) pValues, pValidBits, validBitsOffset, 
-                        out levelsRead, out valuesRead, out nullCount, out var returnValue));
+                    ExceptionInfo.Check(TypedColumnReader_ReadBatchSpaced_Int64(Handle.IntPtr, batchSize, pDefLevels, pRepLevels, (long*) pValues, pValidBits, validBitsOffset, out levelsRead, out valuesRead, out nullCount, out var returnValue));
                     GC.KeepAlive(Handle);
                     return returnValue;
                 }
 
                 if (type == typeof(Int96))
                 {
-                    ExceptionInfo.Check(TypedColumnReader_ReadBatchSpaced_Int96(Handle.IntPtr, 
-                        batchSize, pDefLevels, pRepLevels, (Int96*) pValues, pValidBits, validBitsOffset, 
-                        out levelsRead, out valuesRead, out nullCount, out var returnValue));
+                    ExceptionInfo.Check(TypedColumnReader_ReadBatchSpaced_Int96(Handle.IntPtr, batchSize, pDefLevels, pRepLevels, (Int96*) pValues, pValidBits, validBitsOffset, out levelsRead, out valuesRead, out nullCount, out var returnValue));
                     GC.KeepAlive(Handle);
                     return returnValue;
                 }
 
                 if (type == typeof(float))
                 {
-                    ExceptionInfo.Check(TypedColumnReader_ReadBatchSpaced_Float(Handle.IntPtr,
-                        batchSize, pDefLevels, pRepLevels, (float*) pValues, pValidBits, validBitsOffset, 
-                        out levelsRead, out valuesRead, out nullCount, out var returnValue));
+                    ExceptionInfo.Check(TypedColumnReader_ReadBatchSpaced_Float(Handle.IntPtr, batchSize, pDefLevels, pRepLevels, (float*) pValues, pValidBits, validBitsOffset, out levelsRead, out valuesRead, out nullCount, out var returnValue));
                     GC.KeepAlive(Handle);
                     return returnValue;
                 }
 
                 if (type == typeof(double))
                 {
-                    ExceptionInfo.Check(TypedColumnReader_ReadBatchSpaced_Double(Handle.IntPtr, 
-                        batchSize, pDefLevels, pRepLevels, (double*) pValues, pValidBits, validBitsOffset, 
-                        out levelsRead, out valuesRead, out nullCount, out var returnValue));
+                    ExceptionInfo.Check(TypedColumnReader_ReadBatchSpaced_Double(Handle.IntPtr, batchSize, pDefLevels, pRepLevels, (double*) pValues, pValidBits, validBitsOffset, out levelsRead, out valuesRead, out nullCount, out var returnValue));
                     GC.KeepAlive(Handle);
                     return returnValue;
                 }
 
                 if (type == typeof(ByteArray))
                 {
-                    ExceptionInfo.Check(TypedColumnReader_ReadBatchSpaced_ByteArray(Handle.IntPtr, 
-                        batchSize, pDefLevels, pRepLevels, (ByteArray*) pValues, pValidBits, validBitsOffset, 
-                        out levelsRead, out valuesRead, out nullCount, out var returnValue));
+                    ExceptionInfo.Check(TypedColumnReader_ReadBatchSpaced_ByteArray(Handle.IntPtr, batchSize, pDefLevels, pRepLevels, (ByteArray*) pValues, pValidBits, validBitsOffset, out levelsRead, out valuesRead, out nullCount, out var returnValue));
                     GC.KeepAlive(Handle);
                     return returnValue;
                 }
 
                 if (type == typeof(FixedLenByteArray))
                 {
-                    ExceptionInfo.Check(TypedColumnReader_ReadBatchSpaced_FixedLenByteArray(Handle.IntPtr, 
-                        batchSize, pDefLevels, pRepLevels, (FixedLenByteArray*) pValues, pValidBits, validBitsOffset, 
-                        out levelsRead, out valuesRead, out nullCount, out var returnValue));
+                    ExceptionInfo.Check(TypedColumnReader_ReadBatchSpaced_FixedLenByteArray(Handle.IntPtr, batchSize, pDefLevels, pRepLevels, (FixedLenByteArray*) pValues, pValidBits, validBitsOffset, out levelsRead, out valuesRead, out nullCount, out var returnValue));
                     GC.KeepAlive(Handle);
                     return returnValue;
                 }

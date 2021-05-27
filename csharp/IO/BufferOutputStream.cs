@@ -8,13 +8,11 @@ namespace ParquetSharp.IO
     /// </summary>
     public sealed class BufferOutputStream : OutputStream
     {
-        public BufferOutputStream() 
-            : base(ExceptionInfo.Return<IntPtr>(BufferOutputStream_Create))
+        public BufferOutputStream() : base(ExceptionInfo.Return<IntPtr>(BufferOutputStream_Create))
         {
         }
 
-        public BufferOutputStream(ResizableBuffer resizableBuffer)
-            : base(ExceptionInfo.Return<IntPtr>(resizableBuffer.Handle, BufferOutputStream_Create_From_ResizableBuffer))
+        public BufferOutputStream(ResizableBuffer resizableBuffer) : base(ExceptionInfo.Return<IntPtr>(resizableBuffer.Handle, BufferOutputStream_Create_From_ResizableBuffer))
         {
         }
 

@@ -13,11 +13,7 @@ namespace ParquetSharp.Test
         [Test]
         public static void TestReadingDuplicateStrings([Values(true, false)] bool enableDictionary)
         {
-            var columns = new Column[]
-            {
-                new Column<DateTime>("dateTime"),
-                new Column<string>("value")
-            };
+            var columns = new Column[] {new Column<DateTime>("dateTime"), new Column<string>("value")};
 
             const int numRows = 10_000;
             var rand = new Random(1);
@@ -53,9 +49,7 @@ namespace ParquetSharp.Test
             Assert.AreEqual(values, readValues);
 
             // When reading back the file, we expect the duplicate strings to point to the same memory instances.
-            Assert.That(
-                readValues.Distinct(new StringReferenceComparer()).Count(), 
-                enableDictionary ? Is.EqualTo(100) : Is.EqualTo(numRows));
+            Assert.That(readValues.Distinct(new StringReferenceComparer()).Count(), enableDictionary ? Is.EqualTo(100) : Is.EqualTo(numRows));
         }
 
         private static WriterProperties CreateWriterProperties(bool enableDictionary)

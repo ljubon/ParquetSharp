@@ -9,8 +9,7 @@ namespace ParquetSharp
     /// </summary>
     public abstract class LogicalColumnWriter : LogicalColumnStream<ColumnWriter>
     {
-        protected LogicalColumnWriter(ColumnWriter columnWriter, Type elementType, int bufferLength)
-            : base(columnWriter, columnWriter.ColumnDescriptor, elementType, columnWriter.ElementType, bufferLength)
+        protected LogicalColumnWriter(ColumnWriter columnWriter, Type elementType, int bufferLength) : base(columnWriter, columnWriter.ColumnDescriptor, elementType, columnWriter.ElementType, bufferLength)
         {
         }
 
@@ -28,8 +27,7 @@ namespace ParquetSharp
             try
             {
                 return (LogicalColumnWriter<TElementType>) writer;
-            }
-            catch
+            } catch
             {
                 writer.Dispose();
                 throw;
@@ -58,8 +56,7 @@ namespace ParquetSharp
 
     public abstract class LogicalColumnWriter<TElement> : LogicalColumnWriter
     {
-        protected LogicalColumnWriter(ColumnWriter columnWriter, int bufferLength)
-            : base(columnWriter, typeof(TElement), bufferLength)
+        protected LogicalColumnWriter(ColumnWriter columnWriter, int bufferLength) : base(columnWriter, typeof(TElement), bufferLength)
         {
         }
 
@@ -81,15 +78,11 @@ namespace ParquetSharp
         public abstract void WriteBatch(ReadOnlySpan<TElement> values);
     }
 
-    internal sealed class LogicalColumnWriter<TPhysical, TLogical, TElement> : LogicalColumnWriter<TElement>
-        where TPhysical : unmanaged
+    internal sealed class LogicalColumnWriter<TPhysical, TLogical, TElement> : LogicalColumnWriter<TElement> where TPhysical : unmanaged
     {
-        internal LogicalColumnWriter(ColumnWriter columnWriter, int bufferLength)
-            : base(columnWriter, bufferLength)
+        internal LogicalColumnWriter(ColumnWriter columnWriter, int bufferLength) : base(columnWriter, bufferLength)
         {
-            _byteBuffer = typeof(TPhysical) == typeof(ByteArray) || typeof(TPhysical) == typeof(FixedLenByteArray)
-                ? new ByteBuffer(bufferLength) 
-                : null;
+            _byteBuffer = typeof(TPhysical) == typeof(ByteArray) || typeof(TPhysical) == typeof(FixedLenByteArray) ? new ByteBuffer(bufferLength) : null;
         }
 
         public override void Dispose()
@@ -108,8 +101,7 @@ namespace ParquetSharp
             if (typeof(TElement) != typeof(byte[]) && typeof(TElement).IsArray)
             {
                 WriteArray(values.ToArray(), ArraySchemaNodes, typeof(TElement), converter, 0, 0, 0);
-            }
-            else
+            } else
             {
                 WriteBatchSimple(values, (converter as LogicalWrite<TElement, TPhysical>.Converter)!);
             }
@@ -119,21 +111,11 @@ namespace ParquetSharp
         {
             if (elementType.IsArray && elementType != typeof(byte[]))
             {
-                if (schemaNodes.Length >= 2 && 
-                    schemaNodes[0] is GroupNode {LogicalType: ListLogicalType _, Repetition: Repetition.Optional} &&
-                    schemaNodes[1] is GroupNode {LogicalType: NoneLogicalType _, Repetition: Repetition.Repeated})
+                if (schemaNodes.Length >= 2 && schemaNodes[0] is GroupNode {LogicalType: ListLogicalType _, Repetition: Repetition.Optional} && schemaNodes[1] is GroupNode {LogicalType: NoneLogicalType _, Repetition: Repetition.Repeated})
                 {
                     var containedType = elementType.GetElementType();
 
-                    WriteArrayIntermediateLevel(
-                        array,
-                        schemaNodes.Slice(2),
-                        containedType,
-                        converter,
-                        nullDefinitionLevel,
-                        repetitionLevel,
-                        firstLeafRepLevel
-                    );
+                    WriteArrayIntermediateLevel(array, schemaNodes.Slice(2), containedType, converter, nullDefinitionLevel, repetitionLevel, firstLeafRepLevel);
 
                     return;
                 }
@@ -145,8 +127,8 @@ namespace ParquetSharp
             {
                 bool isOptional = schemaNodes[0].Repetition == Repetition.Optional;
 
-                short leafDefinitionLevel = isOptional ? (short)(nullDefinitionLevel + 1) : nullDefinitionLevel;
-                short leafNullDefinitionLevel = isOptional ? nullDefinitionLevel : (short)-1;
+                short leafDefinitionLevel = isOptional ? (short) (nullDefinitionLevel + 1) : nullDefinitionLevel;
+                short leafNullDefinitionLevel = isOptional ? nullDefinitionLevel : (short) -1;
 
                 WriteArrayFinalLevel(array, repetitionLevel, firstLeafRepLevel, leafDefinitionLevel, converter, leafNullDefinitionLevel);
 
@@ -158,7 +140,7 @@ namespace ParquetSharp
 
         private void WriteArrayIntermediateLevel(Array values, ReadOnlySpan<Node> schemaNodes, Type elementType, LogicalWrite<TLogical, TPhysical>.Converter converter, short nullDefinitionLevel, short repetitionLevel, short firstLeafRepLevel)
         {
-            var columnWriter = (ColumnWriter<TPhysical>)Source;
+            var columnWriter = (ColumnWriter<TPhysical>) Source;
 
             for (var i = 0; i < values.Length; i++)
             {
@@ -172,21 +154,20 @@ namespace ParquetSharp
                     {
                         throw new Exception("non-array encountered at non-leaf level");
                     }
+
                     if (a.Length > 0)
                     {
                         // We have a positive length array, call the top level array writer on its values
-                        WriteArray(a, schemaNodes, elementType, converter, (short)(repetitionLevel + 1), (short)(nullDefinitionLevel + 2), currentLeafRepLevel);
-                    }
-                    else
+                        WriteArray(a, schemaNodes, elementType, converter, (short) (repetitionLevel + 1), (short) (nullDefinitionLevel + 2), currentLeafRepLevel);
+                    } else
                     {
                         // Write that we have a zero length array
-                        columnWriter.WriteBatchSpaced(1, new[] { (short)(nullDefinitionLevel + 1) }, new[] { currentLeafRepLevel }, new byte[] { 0 }, 0, new TPhysical[] { });
+                        columnWriter.WriteBatchSpaced(1, new[] {(short) (nullDefinitionLevel + 1)}, new[] {currentLeafRepLevel}, new byte[] {0}, 0, new TPhysical[] { });
                     }
-                }
-                else
+                } else
                 {
                     // Write that this item is null
-                    columnWriter.WriteBatchSpaced(1, new[] { nullDefinitionLevel }, new[] { currentLeafRepLevel }, new byte[] { 0 }, 0, new TPhysical[] { });
+                    columnWriter.WriteBatchSpaced(1, new[] {nullDefinitionLevel}, new[] {currentLeafRepLevel}, new byte[] {0}, 0, new TPhysical[] { });
                 }
             }
         }
@@ -194,14 +175,9 @@ namespace ParquetSharp
         /// <summary>
         /// Write implementation for writing the deepest level array.
         /// </summary>
-        private void WriteArrayFinalLevel(
-            Array values, 
-            short repetitionLevel, short leafFirstRepLevel, 
-            short leafDefinitionLevel, 
-            LogicalWrite<TLogical, TPhysical>.Converter converter, 
-            short nullDefinitionLevel)
+        private void WriteArrayFinalLevel(Array values, short repetitionLevel, short leafFirstRepLevel, short leafDefinitionLevel, LogicalWrite<TLogical, TPhysical>.Converter converter, short nullDefinitionLevel)
         {
-            ReadOnlySpan<TLogical> valuesSpan = (TLogical[])values;
+            ReadOnlySpan<TLogical> valuesSpan = (TLogical[]) values;
 
             if (converter == null) throw new ArgumentNullException(nameof(converter));
             if (DefLevels == null) throw new InvalidOperationException("DefLevels should not be null.");

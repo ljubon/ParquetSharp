@@ -8,8 +8,7 @@ namespace ParquetSharp.IO
     /// </summary>
     public sealed class BufferReader : RandomAccessFile
     {
-        public BufferReader(Buffer buffer)
-            : base(ExceptionInfo.Return<IntPtr>(buffer.Handle, BufferReader_Create))
+        public BufferReader(Buffer buffer) : base(ExceptionInfo.Return<IntPtr>(buffer.Handle, BufferReader_Create))
         {
         }
 

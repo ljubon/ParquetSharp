@@ -6,8 +6,7 @@ namespace ParquetSharp
 {
     internal sealed class KeyValueMetadata : IDisposable
     {
-        public KeyValueMetadata(IReadOnlyDictionary<string, string> keyValueMetadata)
-            : this(Make(keyValueMetadata))
+        public KeyValueMetadata(IReadOnlyDictionary<string, string> keyValueMetadata) : this(Make(keyValueMetadata))
         {
         }
 
@@ -43,9 +42,7 @@ namespace ParquetSharp
                 }
 
                 return dict;
-            }
-
-            finally
+            } finally
             {
                 KeyValueMetadata_Free_Entries(Handle.IntPtr, keys, values);
                 GC.KeepAlive(Handle);
@@ -99,7 +96,7 @@ namespace ParquetSharp
 
         [DllImport(ParquetDll.Name)]
         private static extern IntPtr KeyValueMetadata_Size(IntPtr keyValueMetadata, out long size);
-        
+
         [DllImport(ParquetDll.Name)]
         private static extern IntPtr KeyValueMetadata_Get_Entries(IntPtr keyValueMetadata, out IntPtr keys, out IntPtr values);
 

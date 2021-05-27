@@ -54,21 +54,13 @@ namespace ParquetSharp.RowOriented
         /// <summary>
         /// Create a row-oriented writer to a file. By default, the column names are reflected from the tuple public fields and properties.
         /// </summary>
-        public static ParquetRowWriter<TTuple> CreateRowWriter<TTuple>(
-            string path,
-            string[]? columnNames = null,
-            Compression compression = Compression.Snappy,
-            IReadOnlyDictionary<string, string>? keyValueMetadata = null)
+        public static ParquetRowWriter<TTuple> CreateRowWriter<TTuple>(string path, string[]? columnNames = null, Compression compression = Compression.Snappy, IReadOnlyDictionary<string, string>? keyValueMetadata = null)
         {
             var (columns, writeDelegate) = GetOrCreateWriteDelegate<TTuple>(columnNames);
             return new ParquetRowWriter<TTuple>(path, columns, compression, keyValueMetadata, writeDelegate);
         }
 
-        public static ParquetRowWriter<TTuple> CreateRowWriter<TTuple>(
-            string path,
-            WriterProperties writerProperties,
-            string[]? columnNames = null,
-            IReadOnlyDictionary<string, string>? keyValueMetadata = null)
+        public static ParquetRowWriter<TTuple> CreateRowWriter<TTuple>(string path, WriterProperties writerProperties, string[]? columnNames = null, IReadOnlyDictionary<string, string>? keyValueMetadata = null)
         {
             var (columns, writeDelegate) = GetOrCreateWriteDelegate<TTuple>(columnNames);
             return new ParquetRowWriter<TTuple>(path, columns, writerProperties, keyValueMetadata, writeDelegate);
@@ -77,21 +69,13 @@ namespace ParquetSharp.RowOriented
         /// <summary>
         /// Create a row-oriented writer to an output stream. By default, the column names are reflected from the tuple public fields and properties.
         /// </summary>
-        public static ParquetRowWriter<TTuple> CreateRowWriter<TTuple>(
-            OutputStream outputStream,
-            string[]? columnNames = null,
-            Compression compression = Compression.Snappy,
-            IReadOnlyDictionary<string, string>? keyValueMetadata = null)
+        public static ParquetRowWriter<TTuple> CreateRowWriter<TTuple>(OutputStream outputStream, string[]? columnNames = null, Compression compression = Compression.Snappy, IReadOnlyDictionary<string, string>? keyValueMetadata = null)
         {
             var (columns, writeDelegate) = GetOrCreateWriteDelegate<TTuple>(columnNames);
             return new ParquetRowWriter<TTuple>(outputStream, columns, compression, keyValueMetadata, writeDelegate);
         }
 
-        public static ParquetRowWriter<TTuple> CreateRowWriter<TTuple>(
-            OutputStream outputStream,
-            WriterProperties writerProperties,
-            string[]? columnNames = null,
-            IReadOnlyDictionary<string, string>? keyValueMetadata = null)
+        public static ParquetRowWriter<TTuple> CreateRowWriter<TTuple>(OutputStream outputStream, WriterProperties writerProperties, string[]? columnNames = null, IReadOnlyDictionary<string, string>? keyValueMetadata = null)
         {
             var (columns, writeDelegate) = GetOrCreateWriteDelegate<TTuple>(columnNames);
             return new ParquetRowWriter<TTuple>(outputStream, columns, writerProperties, keyValueMetadata, writeDelegate);
@@ -140,14 +124,7 @@ namespace ParquetSharp.RowOriented
 
             // Loop over the tuples, constructing them from the column buffers.
             var index = Expression.Variable(typeof(int), "index");
-            var loop = For(index, Expression.Constant(0), Expression.NotEqual(index, length), Expression.PreIncrementAssign(index),
-                Expression.Assign(
-                    Expression.ArrayAccess(tuples, index),
-                    ctor == null
-                        ? Expression.MemberInit(Expression.New(typeof(TTuple)), fields.Select((f, i) => Expression.Bind(f.info, Expression.ArrayAccess(buffers[i], index))))
-                        : (Expression) Expression.New(ctor, fields.Select((f, i) => (Expression) Expression.ArrayAccess(buffers[i], index)))
-                )
-            );
+            var loop = For(index, Expression.Constant(0), Expression.NotEqual(index, length), Expression.PreIncrementAssign(index), Expression.Assign(Expression.ArrayAccess(tuples, index), ctor == null ? Expression.MemberInit(Expression.New(typeof(TTuple)), fields.Select((f, i) => Expression.Bind(f.info, Expression.ArrayAccess(buffers[i], index)))) : (Expression) Expression.New(ctor, fields.Select((f, i) => (Expression) Expression.ArrayAccess(buffers[i], index)))));
 
             var body = Expression.Block(buffers, bufferAssigns.Concat(reads).Concat(new[] {loop}));
             var lambda = Expression.Lambda<ParquetRowReader<TTuple>.ReadAction>(body, reader, tuples, length);
@@ -178,22 +155,12 @@ namespace ParquetSharp.RowOriented
 
                 // Loop over the tuples and fill the current column buffer.
                 var index = Expression.Variable(typeof(int), "index");
-                var loop = For(index, Expression.Constant(0), Expression.NotEqual(index, length), Expression.PreIncrementAssign(index),
-                    Expression.Assign(
-                        Expression.ArrayAccess(buffer, index),
-                        Expression.PropertyOrField(Expression.ArrayAccess(tuples, index), f.name)
-                    )
-                );
+                var loop = For(index, Expression.Constant(0), Expression.NotEqual(index, length), Expression.PreIncrementAssign(index), Expression.Assign(Expression.ArrayAccess(buffer, index), Expression.PropertyOrField(Expression.ArrayAccess(tuples, index), f.name)));
 
                 // Write the buffer to Parquet.
                 var writeCall = Expression.Call(writer, GetWriteMethod<TTuple>(buffer.Type.GetElementType()), buffer, length);
 
-                return Expression.Block(
-                    new[] {buffer, index},
-                    bufferAssign,
-                    loop,
-                    writeCall,
-                    bufferReset);
+                return Expression.Block(new[] {buffer, index}, bufferAssign, loop, writeCall, bufferReset);
             });
 
             var body = Expression.Block(columnBodies);
@@ -224,25 +191,12 @@ namespace ParquetSharp.RowOriented
             return genericMethod.MakeGenericMethod(type);
         }
 
-        private static Expression For(
-            ParameterExpression loopVar,
-            Expression initValue, Expression condition, Expression increment,
-            Expression loopContent)
+        private static Expression For(ParameterExpression loopVar, Expression initValue, Expression condition, Expression increment, Expression loopContent)
         {
             var initAssign = Expression.Assign(loopVar, initValue);
             var breakLabel = Expression.Label("LoopBreak");
 
-            return Expression.Block(new[] { loopVar },
-                initAssign,
-                Expression.Loop(
-                    Expression.IfThenElse(
-                        condition,
-                        Expression.Block(
-                            loopContent,
-                            increment),
-                        Expression.Break(breakLabel)),
-                    breakLabel)
-            );
+            return Expression.Block(new[] {loopVar}, initAssign, Expression.Loop(Expression.IfThenElse(condition, Expression.Block(loopContent, increment), Expression.Break(breakLabel)), breakLabel));
         }
 
         private static (string name, string? mappedColumn, Type type, MemberInfo info)[] GetFieldsAndProperties(Type type)
@@ -289,9 +243,7 @@ namespace ParquetSharp.RowOriented
         private static Column GetColumn((string name, string? mappedColumn, Type type, MemberInfo info) field)
         {
             var isDecimal = field.type == typeof(decimal) || field.type == typeof(decimal?);
-            var decimalScale = field.info.GetCustomAttributes(typeof(ParquetDecimalScaleAttribute))
-                .Cast<ParquetDecimalScaleAttribute>()
-                .SingleOrDefault();
+            var decimalScale = field.info.GetCustomAttributes(typeof(ParquetDecimalScaleAttribute)).Cast<ParquetDecimalScaleAttribute>().SingleOrDefault();
 
             if (!isDecimal && decimalScale != null)
             {
@@ -306,10 +258,8 @@ namespace ParquetSharp.RowOriented
             return new Column(field.type, field.mappedColumn ?? field.name, isDecimal ? LogicalType.Decimal(29, decimalScale!.Scale) : null);
         }
 
-        private static readonly ConcurrentDictionary<Type, Delegate> ReadDelegatesCache =
-            new ConcurrentDictionary<Type, Delegate>();
+        private static readonly ConcurrentDictionary<Type, Delegate> ReadDelegatesCache = new ConcurrentDictionary<Type, Delegate>();
 
-        private static readonly ConcurrentDictionary<Type, (Column[] columns, Delegate writeDelegate)> WriteDelegates =
-            new ConcurrentDictionary<Type, (Column[] columns, Delegate writeDelegate)>();
+        private static readonly ConcurrentDictionary<Type, (Column[] columns, Delegate writeDelegate)> WriteDelegates = new ConcurrentDictionary<Type, (Column[] columns, Delegate writeDelegate)>();
     }
 }

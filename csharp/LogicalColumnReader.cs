@@ -11,8 +11,7 @@ namespace ParquetSharp
     /// </summary>
     public abstract class LogicalColumnReader : LogicalColumnStream<ColumnReader>
     {
-        protected LogicalColumnReader(ColumnReader columnReader, Type elementType, int bufferLength)
-            : base(columnReader, columnReader.ColumnDescriptor, elementType, columnReader.ElementType, bufferLength)
+        protected LogicalColumnReader(ColumnReader columnReader, Type elementType, int bufferLength) : base(columnReader, columnReader.ColumnDescriptor, elementType, columnReader.ElementType, bufferLength)
         {
         }
 
@@ -30,8 +29,7 @@ namespace ParquetSharp
             try
             {
                 return (LogicalColumnReader<TElement>) reader;
-            }
-            catch
+            } catch
             {
                 reader.Dispose();
                 throw;
@@ -62,8 +60,7 @@ namespace ParquetSharp
 
     public abstract class LogicalColumnReader<TElement> : LogicalColumnReader, IEnumerable<TElement>
     {
-        protected LogicalColumnReader(ColumnReader columnReader, int bufferLength)
-            : base(columnReader, typeof(TElement), bufferLength)
+        protected LogicalColumnReader(ColumnReader columnReader, int bufferLength) : base(columnReader, typeof(TElement), bufferLength)
         {
         }
 
@@ -113,11 +110,9 @@ namespace ParquetSharp
         public abstract int ReadBatch(Span<TElement> destination);
     }
 
-    internal sealed class LogicalColumnReader<TPhysical, TLogical, TElement> : LogicalColumnReader<TElement>
-        where TPhysical : unmanaged
+    internal sealed class LogicalColumnReader<TPhysical, TLogical, TElement> : LogicalColumnReader<TElement> where TPhysical : unmanaged
     {
-        internal LogicalColumnReader(ColumnReader columnReader, int bufferLength)
-            : base(columnReader, bufferLength)
+        internal LogicalColumnReader(ColumnReader columnReader, int bufferLength) : base(columnReader, bufferLength)
         {
             var byteArrayCache = new ByteArrayReaderCache<TPhysical, TLogical>(columnReader.ColumnChunkMetaData);
 
@@ -135,10 +130,7 @@ namespace ParquetSharp
             }
 
             // Otherwise deal with flat values.
-            return ReadBatchSimple(
-                destination, 
-                _directReader as LogicalRead<TElement, TPhysical>.DirectReader, 
-                (_converter as LogicalRead<TElement, TPhysical>.Converter)!);
+            return ReadBatchSimple(destination, _directReader as LogicalRead<TElement, TPhysical>.DirectReader, (_converter as LogicalRead<TElement, TPhysical>.Converter)!);
         }
 
         private int ReadBatchArray(Span<TElement> destination, LogicalRead<TLogical, TPhysical>.Converter converter)
@@ -150,17 +142,13 @@ namespace ParquetSharp
             return result.Length;
         }
 
-        private static Array ReadArray(
-            ReadOnlySpan<Node> schemaNodes, Type elementType, LogicalRead<TLogical, TPhysical>.Converter converter, 
-            BufferedReader<TPhysical> valueReader, int numArrayEntriesToRead, int repetitionLevel, int nullDefinitionLevel)
+        private static Array ReadArray(ReadOnlySpan<Node> schemaNodes, Type elementType, LogicalRead<TLogical, TPhysical>.Converter converter, BufferedReader<TPhysical> valueReader, int numArrayEntriesToRead, int repetitionLevel, int nullDefinitionLevel)
         {
             if (elementType.IsArray && elementType != typeof(byte[]))
             {
-                if (schemaNodes.Length >= 2 && 
-                    schemaNodes[0] is GroupNode {LogicalType: ListLogicalType _, Repetition: Repetition.Optional} && 
-                    schemaNodes[1] is GroupNode {LogicalType: NoneLogicalType _, Repetition: Repetition.Repeated})
+                if (schemaNodes.Length >= 2 && schemaNodes[0] is GroupNode {LogicalType: ListLogicalType _, Repetition: Repetition.Optional} && schemaNodes[1] is GroupNode {LogicalType: NoneLogicalType _, Repetition: Repetition.Repeated})
                 {
-                    return ReadArrayIntermediateLevel(schemaNodes, valueReader, elementType, converter, numArrayEntriesToRead, (short)repetitionLevel, (short)nullDefinitionLevel);
+                    return ReadArrayIntermediateLevel(schemaNodes, valueReader, elementType, converter, numArrayEntriesToRead, (short) repetitionLevel, (short) nullDefinitionLevel);
                 }
 
                 throw new Exception("elementType is an array but schema does not match the expected layout");
@@ -170,14 +158,13 @@ namespace ParquetSharp
             {
                 bool optional = schemaNodes[0].Repetition == Repetition.Optional;
 
-                return ReadArrayLeafLevel(valueReader, converter, optional, (short)repetitionLevel, (short)nullDefinitionLevel);
+                return ReadArrayLeafLevel(valueReader, converter, optional, (short) repetitionLevel, (short) nullDefinitionLevel);
             }
 
             throw new Exception("ParquetSharp does not understand the schema used");
         }
 
-        private static Array ReadArrayIntermediateLevel(ReadOnlySpan<Node> schemaNodes, BufferedReader<TPhysical> valueReader, Type elementType, 
-            LogicalRead<TLogical, TPhysical>.Converter converter, int numArrayEntriesToRead, short repetitionLevel, short nullDefinitionLevel)
+        private static Array ReadArrayIntermediateLevel(ReadOnlySpan<Node> schemaNodes, BufferedReader<TPhysical> valueReader, Type elementType, LogicalRead<TLogical, TPhysical>.Converter converter, int numArrayEntriesToRead, short repetitionLevel, short nullDefinitionLevel)
         {
             var acc = new List<Array?>();
 
@@ -190,13 +177,13 @@ namespace ParquetSharp
                 if (defn.DefLevel >= nullDefinitionLevel + 2)
                 {
                     newItem = ReadArray(schemaNodes.Slice(2), elementType.GetElementType(), converter, valueReader, -1, repetitionLevel + 1, nullDefinitionLevel + 2);
-                }
-                else
+                } else
                 {
                     if (defn.DefLevel == nullDefinitionLevel + 1)
                     {
                         newItem = CreateEmptyArray(elementType);
                     }
+
                     valueReader.NextDefinition();
                 }
 
@@ -272,16 +259,13 @@ namespace ParquetSharp
         /// <summary>
         /// Fast implementation when a column contains only flat primitive values.
         /// </summary>
-        private int ReadBatchSimple<TTLogical>(
-            Span<TTLogical> destination, 
-            LogicalRead<TTLogical, TPhysical>.DirectReader? directReader,
-            LogicalRead<TTLogical, TPhysical>.Converter converter)
+        private int ReadBatchSimple<TTLogical>(Span<TTLogical> destination, LogicalRead<TTLogical, TPhysical>.DirectReader? directReader, LogicalRead<TTLogical, TPhysical>.Converter converter)
         {
             if (typeof(TTLogical) != typeof(TLogical)) throw new ArgumentException("generic logical type should never be different");
             if (directReader != null && DefLevels != null) throw new ArgumentException("direct reader cannot be provided if type is optional");
             if (converter == null) throw new ArgumentNullException(nameof(converter));
 
-            var columnReader = (ColumnReader<TPhysical>)Source;
+            var columnReader = (ColumnReader<TPhysical>) Source;
             var rowsRead = 0;
 
             // Fast path for logical types that directly map to the physical type in memory.

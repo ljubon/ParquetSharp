@@ -5,18 +5,15 @@ namespace ParquetSharp.Schema
 {
     public sealed class ColumnPath : IDisposable
     {
-        public ColumnPath(string[] dotVector)
-            : this(Make(dotVector))
+        public ColumnPath(string[] dotVector) : this(Make(dotVector))
         {
         }
 
-        public ColumnPath(string dotString)
-            : this(Make(dotString))
+        public ColumnPath(string dotString) : this(Make(dotString))
         {
         }
 
-        public ColumnPath(Node node)
-            : this(Make(node))
+        public ColumnPath(Node node) : this(Make(node))
         {
         }
 

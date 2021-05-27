@@ -14,23 +14,19 @@ namespace ParquetSharp.RowOriented
     {
         internal delegate void ReadAction(ParquetRowReader<TTuple> parquetRowReader, TTuple[] rows, int length);
 
-        internal ParquetRowReader(string path, ReadAction readAction, (string name, string? mappedColumn, Type type, MemberInfo info)[] fields)
-            : this(new ParquetFileReader(path), readAction, fields)
+        internal ParquetRowReader(string path, ReadAction readAction, (string name, string? mappedColumn, Type type, MemberInfo info)[] fields) : this(new ParquetFileReader(path), readAction, fields)
         {
         }
 
-        internal ParquetRowReader(string path, ReaderProperties readerProperties, ReadAction readAction, (string name, string? mappedColumn, Type type, MemberInfo info)[] fields)
-            : this(new ParquetFileReader(path, readerProperties), readAction, fields)
+        internal ParquetRowReader(string path, ReaderProperties readerProperties, ReadAction readAction, (string name, string? mappedColumn, Type type, MemberInfo info)[] fields) : this(new ParquetFileReader(path, readerProperties), readAction, fields)
         {
         }
 
-        internal ParquetRowReader(RandomAccessFile randomAccessFile, ReadAction readAction, (string name, string? mappedColumn, Type type, MemberInfo info)[] fields)
-            : this(new ParquetFileReader(randomAccessFile), readAction, fields)
+        internal ParquetRowReader(RandomAccessFile randomAccessFile, ReadAction readAction, (string name, string? mappedColumn, Type type, MemberInfo info)[] fields) : this(new ParquetFileReader(randomAccessFile), readAction, fields)
         {
         }
 
-        internal ParquetRowReader(RandomAccessFile randomAccessFile, ReaderProperties readerProperties, ReadAction readAction, (string name, string? mappedColumn, Type type, MemberInfo info)[] fields)
-            : this(new ParquetFileReader(randomAccessFile, readerProperties), readAction, fields)
+        internal ParquetRowReader(RandomAccessFile randomAccessFile, ReaderProperties readerProperties, ReadAction readAction, (string name, string? mappedColumn, Type type, MemberInfo info)[] fields) : this(new ParquetFileReader(randomAccessFile, readerProperties), readAction, fields)
         {
         }
 
@@ -112,10 +108,7 @@ namespace ParquetSharp.RowOriented
 
                     if (!fileColumns.TryGetValue(mappedColumn, out _))
                     {
-                        throw new ArgumentException(
-                            $"{typeof(TTuple)} maps field '{fields[fieldIndex].name}' to parquet column " +
-                            $"'{fields[fieldIndex].mappedColumn}' but the target column does not exist in the input parquet file."
-                        );
+                        throw new ArgumentException($"{typeof(TTuple)} maps field '{fields[fieldIndex].name}' to parquet column " + $"'{fields[fieldIndex].mappedColumn}' but the target column does not exist in the input parquet file.");
                     }
 
                     _fileColumnIndex[fieldIndex] = fileColumns[mappedColumn];

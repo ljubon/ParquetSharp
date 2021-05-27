@@ -30,9 +30,7 @@ namespace ParquetSharp
                     PhysicalType.FixedLenByteArray => new Statistics<FixedLenByteArray>(parquetHandle),
                     _ => throw new NotSupportedException($"Physical type {type} is not supported")
                 };
-            }
-
-            catch
+            } catch
             {
                 parquetHandle.Dispose();
                 throw;
@@ -129,8 +127,7 @@ namespace ParquetSharp
 
     public sealed class Statistics<TValue> : Statistics where TValue : unmanaged
     {
-        internal Statistics(ParquetHandle handle)
-            : base(handle)
+        internal Statistics(ParquetHandle handle) : base(handle)
         {
         }
 

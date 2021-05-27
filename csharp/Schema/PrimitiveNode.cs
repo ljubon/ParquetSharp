@@ -10,18 +10,11 @@ namespace ParquetSharp.Schema
     /// </summary>
     public sealed class PrimitiveNode : Node
     {
-        public PrimitiveNode(
-            string name, 
-            Repetition repetition, 
-            LogicalType logicalType, 
-            PhysicalType physicalType,
-            int primitiveLength = -1)
-            : this(Make(name, repetition, logicalType, physicalType, primitiveLength))
+        public PrimitiveNode(string name, Repetition repetition, LogicalType logicalType, PhysicalType physicalType, int primitiveLength = -1) : this(Make(name, repetition, logicalType, physicalType, primitiveLength))
         {
         }
 
-        internal PrimitiveNode(IntPtr handle) 
-            : base(handle)
+        internal PrimitiveNode(IntPtr handle) : base(handle)
         {
         }
 
@@ -31,20 +24,10 @@ namespace ParquetSharp.Schema
 
         public override Node DeepClone()
         {
-            return new PrimitiveNode(
-                Name,
-                Repetition,
-                LogicalType,
-                PhysicalType,
-                TypeLength);
+            return new PrimitiveNode(Name, Repetition, LogicalType, PhysicalType, TypeLength);
         }
 
-        private static IntPtr Make(
-            string name,
-            Repetition repetition,
-            LogicalType logicalType,
-            PhysicalType physicalType,
-            int primitiveLength)
+        private static IntPtr Make(string name, Repetition repetition, LogicalType logicalType, PhysicalType physicalType, int primitiveLength)
         {
             if (name == null) throw new ArgumentNullException(nameof(name));
             if (logicalType == null) throw new ArgumentNullException(nameof(logicalType));
@@ -55,8 +38,7 @@ namespace ParquetSharp.Schema
         }
 
         [DllImport(ParquetDll.Name, CharSet = CharSet.Ansi)]
-        private static extern IntPtr PrimitiveNode_Make(
-            string name, Repetition repetition, IntPtr logicalType, PhysicalType type, int primitiveLength, out IntPtr primitiveNode);
+        private static extern IntPtr PrimitiveNode_Make(string name, Repetition repetition, IntPtr logicalType, PhysicalType type, int primitiveLength, out IntPtr primitiveNode);
 
         [DllImport(ParquetDll.Name)]
         private static extern IntPtr PrimitiveNode_Column_Order(IntPtr node, out ColumnOrder columnOrder);

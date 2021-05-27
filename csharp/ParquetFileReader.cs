@@ -6,13 +6,11 @@ namespace ParquetSharp
 {
     public sealed class ParquetFileReader : IDisposable
     {
-        public ParquetFileReader(string path)
-            : this(path, ReaderProperties.GetDefaultReaderProperties())
+        public ParquetFileReader(string path) : this(path, ReaderProperties.GetDefaultReaderProperties())
         {
         }
 
-        public ParquetFileReader(RandomAccessFile randomAccessFile)
-            : this(randomAccessFile, ReaderProperties.GetDefaultReaderProperties())
+        public ParquetFileReader(RandomAccessFile randomAccessFile) : this(randomAccessFile, ReaderProperties.GetDefaultReaderProperties())
         {
         }
 

@@ -85,68 +85,52 @@ namespace ParquetSharp
         private static extern IntPtr ColumnWriter_Type(IntPtr columnWriter, out PhysicalType type);
 
         [DllImport(ParquetDll.Name)]
-        protected static extern unsafe IntPtr TypedColumnWriter_WriteBatch_Bool(
-            IntPtr columnWriter, long numValues, short* defLevels, short* repLevels, bool* values);
+        protected static extern unsafe IntPtr TypedColumnWriter_WriteBatch_Bool(IntPtr columnWriter, long numValues, short* defLevels, short* repLevels, bool* values);
 
         [DllImport(ParquetDll.Name)]
-        protected static extern unsafe IntPtr TypedColumnWriter_WriteBatch_Int32(
-            IntPtr columnWriter, long numValues, short* defLevels, short* repLevels, int* values);
+        protected static extern unsafe IntPtr TypedColumnWriter_WriteBatch_Int32(IntPtr columnWriter, long numValues, short* defLevels, short* repLevels, int* values);
 
         [DllImport(ParquetDll.Name)]
-        protected static extern unsafe IntPtr TypedColumnWriter_WriteBatch_Int64(
-            IntPtr columnWriter, long numValues, short* defLevels, short* repLevels, long* values);
+        protected static extern unsafe IntPtr TypedColumnWriter_WriteBatch_Int64(IntPtr columnWriter, long numValues, short* defLevels, short* repLevels, long* values);
 
         [DllImport(ParquetDll.Name)]
-        protected static extern unsafe IntPtr TypedColumnWriter_WriteBatch_Int96(
-            IntPtr columnWriter, long numValues, short* defLevels, short* repLevels, Int96* values);
+        protected static extern unsafe IntPtr TypedColumnWriter_WriteBatch_Int96(IntPtr columnWriter, long numValues, short* defLevels, short* repLevels, Int96* values);
 
         [DllImport(ParquetDll.Name)]
-        protected static extern unsafe IntPtr TypedColumnWriter_WriteBatch_Float(
-            IntPtr columnWriter, long numValues, short* defLevels, short* repLevels, float* values);
+        protected static extern unsafe IntPtr TypedColumnWriter_WriteBatch_Float(IntPtr columnWriter, long numValues, short* defLevels, short* repLevels, float* values);
 
         [DllImport(ParquetDll.Name)]
-        protected static extern unsafe IntPtr TypedColumnWriter_WriteBatch_Double(
-            IntPtr columnWriter, long numValues, short* defLevels, short* repLevels, double* values);
+        protected static extern unsafe IntPtr TypedColumnWriter_WriteBatch_Double(IntPtr columnWriter, long numValues, short* defLevels, short* repLevels, double* values);
 
         [DllImport(ParquetDll.Name)]
-        protected static extern unsafe IntPtr TypedColumnWriter_WriteBatch_ByteArray(
-            IntPtr columnWriter, long numValues, short* defLevels, short* repLevels, ByteArray* values);
+        protected static extern unsafe IntPtr TypedColumnWriter_WriteBatch_ByteArray(IntPtr columnWriter, long numValues, short* defLevels, short* repLevels, ByteArray* values);
 
         [DllImport(ParquetDll.Name)]
-        protected static extern unsafe IntPtr TypedColumnWriter_WriteBatch_FixedLenByteArray(
-            IntPtr columnWriter, long numValues, short* defLevels, short* repLevels, FixedLenByteArray* values);
+        protected static extern unsafe IntPtr TypedColumnWriter_WriteBatch_FixedLenByteArray(IntPtr columnWriter, long numValues, short* defLevels, short* repLevels, FixedLenByteArray* values);
 
         [DllImport(ParquetDll.Name)]
-        protected static extern unsafe IntPtr TypedColumnWriter_WriteBatchSpaced_Bool(
-            IntPtr columnWriter, long numValues, short* defLevels, short* repLevels, byte* validBits, long validBitsOffset, bool* values);
+        protected static extern unsafe IntPtr TypedColumnWriter_WriteBatchSpaced_Bool(IntPtr columnWriter, long numValues, short* defLevels, short* repLevels, byte* validBits, long validBitsOffset, bool* values);
 
         [DllImport(ParquetDll.Name)]
-        protected static extern unsafe IntPtr TypedColumnWriter_WriteBatchSpaced_Int32(
-            IntPtr columnWriter, long numValues, short* defLevels, short* repLevels, byte* validBits, long validBitsOffset, int* values);
+        protected static extern unsafe IntPtr TypedColumnWriter_WriteBatchSpaced_Int32(IntPtr columnWriter, long numValues, short* defLevels, short* repLevels, byte* validBits, long validBitsOffset, int* values);
 
         [DllImport(ParquetDll.Name)]
-        protected static extern unsafe IntPtr TypedColumnWriter_WriteBatchSpaced_Int64(
-            IntPtr columnWriter, long numValues, short* defLevels, short* repLevels, byte* validBits, long validBitsOffset, long* values);
+        protected static extern unsafe IntPtr TypedColumnWriter_WriteBatchSpaced_Int64(IntPtr columnWriter, long numValues, short* defLevels, short* repLevels, byte* validBits, long validBitsOffset, long* values);
 
         [DllImport(ParquetDll.Name)]
-        protected static extern unsafe IntPtr TypedColumnWriter_WriteBatchSpaced_Int96(
-            IntPtr columnWriter, long numValues, short* defLevels, short* repLevels, byte* validBits, long validBitsOffset, Int96* values);
+        protected static extern unsafe IntPtr TypedColumnWriter_WriteBatchSpaced_Int96(IntPtr columnWriter, long numValues, short* defLevels, short* repLevels, byte* validBits, long validBitsOffset, Int96* values);
 
         [DllImport(ParquetDll.Name)]
-        protected static extern unsafe IntPtr TypedColumnWriter_WriteBatchSpaced_Float(
-            IntPtr columnWriter, long numValues, short* defLevels, short* repLevels, byte* validBits, long validBitsOffset, float* values);
+        protected static extern unsafe IntPtr TypedColumnWriter_WriteBatchSpaced_Float(IntPtr columnWriter, long numValues, short* defLevels, short* repLevels, byte* validBits, long validBitsOffset, float* values);
 
         [DllImport(ParquetDll.Name)]
-        protected static extern unsafe IntPtr TypedColumnWriter_WriteBatchSpaced_Double(
-            IntPtr columnWriter, long numValues, short* defLevels, short* repLevels, byte* validBits, long validBitsOffset, double* values);
+        protected static extern unsafe IntPtr TypedColumnWriter_WriteBatchSpaced_Double(IntPtr columnWriter, long numValues, short* defLevels, short* repLevels, byte* validBits, long validBitsOffset, double* values);
 
         [DllImport(ParquetDll.Name)]
-        protected static extern unsafe IntPtr TypedColumnWriter_WriteBatchSpaced_ByteArray(
-            IntPtr columnWriter, long numValues, short* defLevels, short* repLevels, byte* validBits, long validBitsOffset, ByteArray* values);
+        protected static extern unsafe IntPtr TypedColumnWriter_WriteBatchSpaced_ByteArray(IntPtr columnWriter, long numValues, short* defLevels, short* repLevels, byte* validBits, long validBitsOffset, ByteArray* values);
 
         [DllImport(ParquetDll.Name)]
-        protected static extern unsafe IntPtr TypedColumnWriter_WriteBatchSpaced_FixedLenByteArray(
-            IntPtr columnWriter, long numValues, short* defLevels, short* repLevels, byte* validBits, long validBitsOffset, FixedLenByteArray* values);
+        protected static extern unsafe IntPtr TypedColumnWriter_WriteBatchSpaced_FixedLenByteArray(IntPtr columnWriter, long numValues, short* defLevels, short* repLevels, byte* validBits, long validBitsOffset, FixedLenByteArray* values);
 
         protected readonly IntPtr Handle;
     }
@@ -154,8 +138,7 @@ namespace ParquetSharp
     /// <inheritdoc />
     public sealed class ColumnWriter<TValue> : ColumnWriter where TValue : unmanaged
     {
-        internal ColumnWriter(IntPtr handle)
-            : base(handle)
+        internal ColumnWriter(IntPtr handle) : base(handle)
         {
         }
 
@@ -185,57 +168,49 @@ namespace ParquetSharp
             {
                 if (type == typeof(bool))
                 {
-                    ExceptionInfo.Check(TypedColumnWriter_WriteBatch_Bool(Handle, 
-                        numValues, pDefLevels, pRepLevels, (bool*) pValues));
+                    ExceptionInfo.Check(TypedColumnWriter_WriteBatch_Bool(Handle, numValues, pDefLevels, pRepLevels, (bool*) pValues));
                     return;
                 }
 
                 if (type == typeof(int))
                 {
-                    ExceptionInfo.Check(TypedColumnWriter_WriteBatch_Int32(Handle, 
-                        numValues, pDefLevels, pRepLevels, (int*) pValues));
+                    ExceptionInfo.Check(TypedColumnWriter_WriteBatch_Int32(Handle, numValues, pDefLevels, pRepLevels, (int*) pValues));
                     return;
                 }
 
                 if (type == typeof(long))
                 {
-                    ExceptionInfo.Check(TypedColumnWriter_WriteBatch_Int64(Handle, 
-                        numValues, pDefLevels, pRepLevels, (long*) pValues));
+                    ExceptionInfo.Check(TypedColumnWriter_WriteBatch_Int64(Handle, numValues, pDefLevels, pRepLevels, (long*) pValues));
                     return;
                 }
 
                 if (type == typeof(Int96))
                 {
-                    ExceptionInfo.Check(TypedColumnWriter_WriteBatch_Int96(Handle, 
-                        numValues, pDefLevels, pRepLevels, (Int96*) pValues));
+                    ExceptionInfo.Check(TypedColumnWriter_WriteBatch_Int96(Handle, numValues, pDefLevels, pRepLevels, (Int96*) pValues));
                     return;
                 }
 
                 if (type == typeof(float))
                 {
-                    ExceptionInfo.Check(TypedColumnWriter_WriteBatch_Float(Handle, 
-                        numValues, pDefLevels, pRepLevels, (float*) pValues));
+                    ExceptionInfo.Check(TypedColumnWriter_WriteBatch_Float(Handle, numValues, pDefLevels, pRepLevels, (float*) pValues));
                     return;
                 }
 
                 if (type == typeof(double))
                 {
-                    ExceptionInfo.Check(TypedColumnWriter_WriteBatch_Double(Handle, 
-                        numValues, pDefLevels, pRepLevels, (double*) pValues));
+                    ExceptionInfo.Check(TypedColumnWriter_WriteBatch_Double(Handle, numValues, pDefLevels, pRepLevels, (double*) pValues));
                     return;
                 }
 
                 if (type == typeof(ByteArray))
                 {
-                    ExceptionInfo.Check(TypedColumnWriter_WriteBatch_ByteArray(Handle, 
-                        numValues, pDefLevels, pRepLevels, (ByteArray*) pValues));
+                    ExceptionInfo.Check(TypedColumnWriter_WriteBatch_ByteArray(Handle, numValues, pDefLevels, pRepLevels, (ByteArray*) pValues));
                     return;
                 }
 
                 if (type == typeof(FixedLenByteArray))
                 {
-                    ExceptionInfo.Check(TypedColumnWriter_WriteBatch_FixedLenByteArray(Handle, 
-                        numValues, pDefLevels, pRepLevels, (FixedLenByteArray*) pValues));
+                    ExceptionInfo.Check(TypedColumnWriter_WriteBatch_FixedLenByteArray(Handle, numValues, pDefLevels, pRepLevels, (FixedLenByteArray*) pValues));
                     return;
                 }
 
@@ -243,9 +218,7 @@ namespace ParquetSharp
             }
         }
 
-        public unsafe void WriteBatchSpaced(
-            int numValues, ReadOnlySpan<short> defLevels, ReadOnlySpan<short> repLevels, 
-            ReadOnlySpan<byte> validBits, long validBitsOffset, ReadOnlySpan<TValue> values)
+        public unsafe void WriteBatchSpaced(int numValues, ReadOnlySpan<short> defLevels, ReadOnlySpan<short> repLevels, ReadOnlySpan<byte> validBits, long validBitsOffset, ReadOnlySpan<TValue> values)
         {
             if (values == null) throw new ArgumentNullException(nameof(values));
             if (defLevels == null) throw new ArgumentNullException(nameof(defLevels));
@@ -266,57 +239,49 @@ namespace ParquetSharp
             {
                 if (type == typeof(bool))
                 {
-                    ExceptionInfo.Check(TypedColumnWriter_WriteBatchSpaced_Bool(Handle,
-                        numValues, pDefLevels, pRepLevels, pValidBits, validBitsOffset, (bool*) pValues));
+                    ExceptionInfo.Check(TypedColumnWriter_WriteBatchSpaced_Bool(Handle, numValues, pDefLevels, pRepLevels, pValidBits, validBitsOffset, (bool*) pValues));
                     return;
                 }
 
                 if (type == typeof(int))
                 {
-                    ExceptionInfo.Check(TypedColumnWriter_WriteBatchSpaced_Int32(Handle, 
-                        numValues, pDefLevels, pRepLevels, pValidBits, validBitsOffset, (int*) pValues));
+                    ExceptionInfo.Check(TypedColumnWriter_WriteBatchSpaced_Int32(Handle, numValues, pDefLevels, pRepLevels, pValidBits, validBitsOffset, (int*) pValues));
                     return;
                 }
 
                 if (type == typeof(long))
                 {
-                    ExceptionInfo.Check(TypedColumnWriter_WriteBatchSpaced_Int64(Handle, 
-                        numValues, pDefLevels, pRepLevels, pValidBits, validBitsOffset, (long*) pValues));
+                    ExceptionInfo.Check(TypedColumnWriter_WriteBatchSpaced_Int64(Handle, numValues, pDefLevels, pRepLevels, pValidBits, validBitsOffset, (long*) pValues));
                     return;
                 }
 
                 if (type == typeof(Int96))
                 {
-                    ExceptionInfo.Check(TypedColumnWriter_WriteBatchSpaced_Int96(Handle, 
-                        numValues, pDefLevels, pRepLevels, pValidBits, validBitsOffset, (Int96*) pValues));
+                    ExceptionInfo.Check(TypedColumnWriter_WriteBatchSpaced_Int96(Handle, numValues, pDefLevels, pRepLevels, pValidBits, validBitsOffset, (Int96*) pValues));
                     return;
                 }
 
                 if (type == typeof(float))
                 {
-                    ExceptionInfo.Check(TypedColumnWriter_WriteBatchSpaced_Float(Handle, 
-                        numValues, pDefLevels, pRepLevels, pValidBits, validBitsOffset, (float*) pValues));
+                    ExceptionInfo.Check(TypedColumnWriter_WriteBatchSpaced_Float(Handle, numValues, pDefLevels, pRepLevels, pValidBits, validBitsOffset, (float*) pValues));
                     return;
                 }
 
                 if (type == typeof(double))
                 {
-                    ExceptionInfo.Check(TypedColumnWriter_WriteBatchSpaced_Double(Handle, 
-                        numValues, pDefLevels, pRepLevels, pValidBits, validBitsOffset, (double*) pValues));
+                    ExceptionInfo.Check(TypedColumnWriter_WriteBatchSpaced_Double(Handle, numValues, pDefLevels, pRepLevels, pValidBits, validBitsOffset, (double*) pValues));
                     return;
                 }
 
                 if (type == typeof(ByteArray))
                 {
-                    ExceptionInfo.Check(TypedColumnWriter_WriteBatchSpaced_ByteArray(Handle, 
-                        numValues, pDefLevels, pRepLevels, pValidBits, validBitsOffset, (ByteArray*) pValues));
+                    ExceptionInfo.Check(TypedColumnWriter_WriteBatchSpaced_ByteArray(Handle, numValues, pDefLevels, pRepLevels, pValidBits, validBitsOffset, (ByteArray*) pValues));
                     return;
                 }
 
                 if (type == typeof(FixedLenByteArray))
                 {
-                    ExceptionInfo.Check(TypedColumnWriter_WriteBatchSpaced_FixedLenByteArray(Handle, 
-                        numValues, pDefLevels, pRepLevels, pValidBits, validBitsOffset, (FixedLenByteArray*) pValues));
+                    ExceptionInfo.Check(TypedColumnWriter_WriteBatchSpaced_FixedLenByteArray(Handle, numValues, pDefLevels, pRepLevels, pValidBits, validBitsOffset, (FixedLenByteArray*) pValues));
                     return;
                 }
 

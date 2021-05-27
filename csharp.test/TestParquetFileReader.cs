@@ -16,12 +16,7 @@ namespace ParquetSharp.Test
             var exception = Assert.Throws<ParquetException>(() => { new ParquetFileReader("non_existent.parquet"); });
             var isUnix = RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
 
-            Assert.AreEqual(
-                (isUnix ? "N7parquet22ParquetStatusExceptionE" : "class parquet::ParquetStatusException") +
-                " (message: 'IOError: Failed to open local file 'non_existent.parquet'. Detail: " +
-                (isUnix ? "[errno 2] No such file or directory" : "[Windows error 2] The system cannot find the file specified." + Environment.NewLine) +
-                "')",
-                exception?.Message);
+            Assert.AreEqual((isUnix ? "N7parquet22ParquetStatusExceptionE" : "class parquet::ParquetStatusException") + " (message: 'IOError: Failed to open local file 'non_existent.parquet'. Detail: " + (isUnix ? "[errno 2] No such file or directory" : "[Windows error 2] The system cannot find the file specified." + Environment.NewLine) + "')", exception?.Message);
         }
 
         [Test]
@@ -47,19 +42,14 @@ namespace ParquetSharp.Test
                     using var columnReader = groupReader.Column(0).LogicalReader<float>();
 
                     Assert.AreEqual(new[] {1, 2, 3}, columnReader.ReadAll(3));
-                }
-                finally
+                } finally
                 {
                     // This will throw on Windows if the file handle has not been released.
                     File.Delete("file.parquet");
                 }
             });
 
-            Assert.AreEqual(
-                "Unable to cast object of type " +
-                "'ParquetSharp.LogicalColumnReader`3[System.Int32,System.Int32,System.Int32]'" +
-                " to type 'ParquetSharp.LogicalColumnReader`1[System.Single]'.",
-                exception?.Message);
+            Assert.AreEqual("Unable to cast object of type " + "'ParquetSharp.LogicalColumnReader`3[System.Int32,System.Int32,System.Int32]'" + " to type 'ParquetSharp.LogicalColumnReader`1[System.Single]'.", exception?.Message);
         }
 
         [Test]

@@ -8,8 +8,7 @@ namespace ParquetSharp.IO
     /// </summary>
     public class Buffer : IDisposable
     {
-        public Buffer(IntPtr data, long size)
-            : this(Make(data, size))
+        public Buffer(IntPtr data, long size) : this(Make(data, size))
         {
         }
 

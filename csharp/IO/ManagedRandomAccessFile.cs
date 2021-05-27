@@ -9,8 +9,7 @@ namespace ParquetSharp.IO
     /// </summary>
     public sealed class ManagedRandomAccessFile : RandomAccessFile
     {
-        public ManagedRandomAccessFile(Stream stream)
-            : this(stream, false)
+        public ManagedRandomAccessFile(Stream stream) : this(stream, false)
         {
         }
 
@@ -28,13 +27,7 @@ namespace ParquetSharp.IO
             Handle = Create(_read, _close, _getSize, _tell, _seek, _closed);
         }
 
-        private static ParquetHandle Create(
-            ReadDelegate read,
-            CloseDelegate close,
-            GetSizeDelegate getSize,
-            TellDelegate tell,
-            SeekDelegate seek,
-            ClosedDelegate closed)
+        private static ParquetHandle Create(ReadDelegate read, CloseDelegate close, GetSizeDelegate getSize, TellDelegate tell, SeekDelegate seek, ClosedDelegate closed)
         {
             ExceptionInfo.Check(ManagedRandomAccessFile_Create(read, close, getSize, tell, seek, closed, out var handle));
             return new ParquetHandle(handle, RandomAccessFile_Free);
@@ -58,8 +51,7 @@ namespace ParquetSharp.IO
 #endif
                 exception = null;
                 return 0;
-            }
-            catch (Exception error)
+            } catch (Exception error)
             {
                 return HandleException(error, out exception);
             }
@@ -69,15 +61,14 @@ namespace ParquetSharp.IO
         {
             try
             {
-                if(!_leaveOpen)
+                if (!_leaveOpen)
                 {
                     _stream.Close();
                 }
 
                 exception = null;
                 return 0;
-            }
-            catch (Exception error)
+            } catch (Exception error)
             {
                 return HandleException(error, out exception);
             }
@@ -90,8 +81,7 @@ namespace ParquetSharp.IO
                 Marshal.WriteInt64(size, _stream.Length);
                 exception = null;
                 return 0;
-            }
-            catch (Exception error)
+            } catch (Exception error)
             {
                 return HandleException(error, out exception);
             }
@@ -104,8 +94,7 @@ namespace ParquetSharp.IO
                 Marshal.WriteInt64(position, _stream.Position);
                 exception = null;
                 return 0;
-            }
-            catch (Exception error)
+            } catch (Exception error)
             {
                 return HandleException(error, out exception);
             }
@@ -118,8 +107,7 @@ namespace ParquetSharp.IO
                 _stream.Position = position;
                 exception = null;
                 return 0;
-            }
-            catch (Exception error)
+            } catch (Exception error)
             {
                 return HandleException(error, out exception);
             }
@@ -130,8 +118,7 @@ namespace ParquetSharp.IO
             try
             {
                 return !_stream.CanRead;
-            }
-            catch
+            } catch
             {
                 return true;
             }
@@ -144,6 +131,7 @@ namespace ParquetSharp.IO
                 exception = _exceptionMessage = null;
                 return 1;
             }
+
             if (error is IOException)
             {
                 exception = _exceptionMessage = error.ToString();
@@ -155,20 +143,18 @@ namespace ParquetSharp.IO
         }
 
         [DllImport(ParquetDll.Name)]
-        private static extern IntPtr ManagedRandomAccessFile_Create(
-            ReadDelegate read,
-            CloseDelegate close,
-            GetSizeDelegate getSize,
-            TellDelegate tell,
-            SeekDelegate seek,
-            ClosedDelegate closed,
-            out IntPtr randomAccessFile);
+        private static extern IntPtr ManagedRandomAccessFile_Create(ReadDelegate read, CloseDelegate close, GetSizeDelegate getSize, TellDelegate tell, SeekDelegate seek, ClosedDelegate closed, out IntPtr randomAccessFile);
 
         private delegate byte ReadDelegate(long nbyte, IntPtr bytesRead, IntPtr dest, [MarshalAs(UnmanagedType.LPStr)] out string? exception);
+
         private delegate byte CloseDelegate([MarshalAs(UnmanagedType.LPStr)] out string? exception);
+
         private delegate byte GetSizeDelegate(IntPtr size, [MarshalAs(UnmanagedType.LPStr)] out string? exception);
+
         private delegate byte TellDelegate(IntPtr position, [MarshalAs(UnmanagedType.LPStr)] out string? exception);
+
         private delegate byte SeekDelegate(long position, [MarshalAs(UnmanagedType.LPStr)] out string? exception);
+
         private delegate bool ClosedDelegate();
 
         private readonly Stream _stream;
@@ -181,6 +167,7 @@ namespace ParquetSharp.IO
         private readonly GetSizeDelegate _getSize;
         private readonly TellDelegate _tell;
         private readonly SeekDelegate _seek;
+
         private readonly ClosedDelegate _closed;
         // ReSharper restore PrivateFieldCanBeConvertedToLocalVariable
 

@@ -96,31 +96,16 @@ namespace ParquetSharp.Test
     {
         public Node Build()
         {
-            var subGroupFields = new[]
-            {
-                new PrimitiveNode(_primitiveName, Repetition.Required, LogicalType.Int(32, true), PhysicalType.Int32),
-                new PrimitiveNode("node_1", _primitiveRepetition, LogicalType.Int(32, true), PhysicalType.Int32),
-                new PrimitiveNode("node_2", Repetition.Required, _primitiveLogicalType, _physicalType),
-                new PrimitiveNode("node_3", Repetition.Required, LogicalType.Int(64, true), PhysicalType.Int64),
-                new PrimitiveNode(
-                    "node_4", Repetition.Repeated, LogicalType.Decimal(_precision, _scale), PhysicalType.FixedLenByteArray, _length),
-            };
+            var subGroupFields = new[] {new PrimitiveNode(_primitiveName, Repetition.Required, LogicalType.Int(32, true), PhysicalType.Int32), new PrimitiveNode("node_1", _primitiveRepetition, LogicalType.Int(32, true), PhysicalType.Int32), new PrimitiveNode("node_2", Repetition.Required, _primitiveLogicalType, _physicalType), new PrimitiveNode("node_3", Repetition.Required, LogicalType.Int(64, true), PhysicalType.Int64), new PrimitiveNode("node_4", Repetition.Repeated, LogicalType.Decimal(_precision, _scale), PhysicalType.FixedLenByteArray, _length),};
 
             if (_includeAdditionalField)
             {
-                subGroupFields = subGroupFields.Concat(new[]
-                {
-                    new PrimitiveNode("extra_node", Repetition.Optional, LogicalType.Int(32, true), PhysicalType.Int32),
-                }).ToArray();
+                subGroupFields = subGroupFields.Concat(new[] {new PrimitiveNode("extra_node", Repetition.Optional, LogicalType.Int(32, true), PhysicalType.Int32),}).ToArray();
             }
 
             var subGroup = new GroupNode("subgroup", Repetition.Required, subGroupFields, _groupLogicalType);
 
-            var rootFields = new Node[]
-            {
-                subGroup,
-                new PrimitiveNode("root_primitive", Repetition.Required, LogicalType.Int(32, true), PhysicalType.Int32),
-            };
+            var rootFields = new Node[] {subGroup, new PrimitiveNode("root_primitive", Repetition.Required, LogicalType.Int(32, true), PhysicalType.Int32),};
 
             return new GroupNode(_groupName, _groupRepetition, rootFields);
         }

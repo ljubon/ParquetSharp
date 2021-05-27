@@ -11,16 +11,10 @@ namespace ParquetSharp.Test
         [Test]
         public static void TestRoundTrip(
             // 2^i, 7^j, 11^k are mutually co-prime for i,j,k>0
-            [Values(2, 8, 32, 128)] int rowsPerBatch,
-            [Values(7, 49, 343, 2401)] int writeBufferLength,
-            [Values(11, 121, 1331)] int readBufferLength,
-            [Values(true, false)] bool useDictionaryEncoding
-        )
+            [Values(2, 8, 32, 128)] int rowsPerBatch, [Values(7, 49, 343, 2401)] int writeBufferLength, [Values(11, 121, 1331)] int readBufferLength, [Values(true, false)] bool useDictionaryEncoding)
         {
             var expectedColumns = CreateExpectedColumns();
-            var schemaColumns = expectedColumns         
-                .Select(c => new Column(c.Values.GetType().GetElementType() ?? throw new InvalidOperationException(), c.Name, c.LogicalTypeOverride))
-                .ToArray();
+            var schemaColumns = expectedColumns.Select(c => new Column(c.Values.GetType().GetElementType() ?? throw new InvalidOperationException(), c.Name, c.LogicalTypeOverride)).ToArray();
 
             using var buffer = new ResizableBuffer();
 
@@ -51,16 +45,10 @@ namespace ParquetSharp.Test
         [Test]
         public static void TestRoundTripBuffered(
             // 2^i, 7^j, 11^k are mutually co-prime for i,j,k>0
-            [Values(2, 8, 32, 128)] int rowsPerBatch,
-            [Values(7, 49, 343, 2401)] int writeBufferLength,
-            [Values(11, 121, 1331)] int readBufferLength,
-            [Values(true, false)] bool useDictionaryEncoding
-        )
+            [Values(2, 8, 32, 128)] int rowsPerBatch, [Values(7, 49, 343, 2401)] int writeBufferLength, [Values(11, 121, 1331)] int readBufferLength, [Values(true, false)] bool useDictionaryEncoding)
         {
             var expectedColumns = CreateExpectedColumns();
-            var schemaColumns = expectedColumns
-                .Select(c => new Column(c.Values.GetType().GetElementType() ?? throw new InvalidOperationException(), c.Name, c.LogicalTypeOverride))
-                .ToArray();
+            var schemaColumns = expectedColumns.Select(c => new Column(c.Values.GetType().GetElementType() ?? throw new InvalidOperationException(), c.Name, c.LogicalTypeOverride)).ToArray();
 
             using var buffer = new ResizableBuffer();
 
@@ -72,7 +60,7 @@ namespace ParquetSharp.Test
                 using var rowGroupWriter = fileWriter.AppendBufferedRowGroup();
 
                 const int rangeLength = 9;
-                
+
                 for (int r = 0; r < NumRows; r += rangeLength)
                 {
                     for (var i = 0; i < expectedColumns.Length; i++)
@@ -164,8 +152,7 @@ namespace ParquetSharp.Test
                             Assert.AreEqual(expected.Min, expected.Converter(statistics!.MinUntyped));
                             Assert.AreEqual(expected.Max, expected.Converter(statistics!.MaxUntyped));
                         }
-                    }
-                    else
+                    } else
                     {
                         Assert.IsNull(statistics);
                     }
@@ -185,18 +172,12 @@ namespace ParquetSharp.Test
             // Test a large amount of rows with a buffered row group to uncover any particular issue.
             const int numBatches = 64;
             const int batchSize = 8192;
-            
+
             using var buffer = new ResizableBuffer();
 
             using (var output = new BufferOutputStream(buffer))
             {
-                var columns = new Column[]
-                {
-                    new Column<int>("int"),
-                    new Column<double>("double"),
-                    new Column<string>("string"),
-                    new Column<bool>("bool")
-                };
+                var columns = new Column[] {new Column<int>("int"), new Column<double>("double"), new Column<string>("string"), new Column<bool>("bool")};
 
                 using var builder = new WriterPropertiesBuilder();
                 using var writerProperties = builder.Compression(Compression.Snappy).DisableDictionary("double").Build();
@@ -236,7 +217,7 @@ namespace ParquetSharp.Test
                     var startIndex = batchSize * batchIndex;
 
                     Assert.AreEqual(Enumerable.Range(startIndex, batchSize).ToArray(), col0.ReadAll(batchSize));
-                    Assert.AreEqual(Enumerable.Range(startIndex, batchSize).Select(i => (double)i).ToArray(), col1.ReadAll(batchSize));
+                    Assert.AreEqual(Enumerable.Range(startIndex, batchSize).Select(i => (double) i).ToArray(), col1.ReadAll(batchSize));
                     Assert.AreEqual(Enumerable.Range(startIndex, batchSize).Select(i => i.ToString()).ToArray(), col2.ReadAll(batchSize));
                     Assert.AreEqual(Enumerable.Range(startIndex, batchSize).Select(i => i % 2 == 0).ToArray(), col3.ReadAll(batchSize));
                 }
@@ -296,13 +277,7 @@ namespace ParquetSharp.Test
              * None
              * [[]]
              */
-            var expected = new double?[]?[]?[]
-            {
-                new double?[]?[] {null, new double?[] { }, new double?[] {1.0, null, 2.0}},
-                new double?[]?[] { },
-                null,
-                new double?[]?[] {new double?[] { }}
-            };
+            var expected = new double?[]?[]?[] {new double?[]?[] {null, new double?[] { }, new double?[] {1.0, null, 2.0}}, new double?[]?[] { }, null, new double?[]?[] {new double?[] { }}};
 
             using var buffer = new ResizableBuffer();
 
@@ -330,13 +305,7 @@ namespace ParquetSharp.Test
         [Test]
         public static void TestArrayOfEmptyStringArraysRoundtrip()
         {
-            var expected = new[]
-            {
-                new string[] { },
-                new string[] { },
-                new string[] { },
-                new string[] { }
-            };
+            var expected = new[] {new string[] { }, new string[] { }, new string[] { }, new string[] { }};
 
             using var buffer = new ResizableBuffer();
 
@@ -604,7 +573,7 @@ namespace ParquetSharp.Test
                     Length = 16,
                     Values = Enumerable.Range(0, NumRows).Select(i => ((decimal) i * i * i) / 1000 - 10).ToArray(),
                     Min = -10m,
-                    Max = ((NumRows-1m) * (NumRows-1m) * (NumRows-1m)) / 1000 - 10,
+                    Max = ((NumRows - 1m) * (NumRows - 1m) * (NumRows - 1m)) / 1000 - 10,
                     Converter = v => LogicalRead.ToDecimal((FixedLenByteArray) v, 3)
                 },
                 new ExpectedColumn
@@ -618,7 +587,7 @@ namespace ParquetSharp.Test
                     NullCount = (NumRows + 10) / 11,
                     NumValues = NumRows - (NumRows + 10) / 11,
                     Min = -9.999m,
-                    Max = ((NumRows-1m) * (NumRows-1m) * (NumRows-1m)) / 1000 - 10,
+                    Max = ((NumRows - 1m) * (NumRows - 1m) * (NumRows - 1m)) / 1000 - 10,
                     Converter = v => LogicalRead.ToDecimal((FixedLenByteArray) v, 3)
                 },
                 new ExpectedColumn
@@ -861,29 +830,15 @@ namespace ParquetSharp.Test
                     {
                         if (i % 3 == 0)
                         {
-                            return new[]
-                            {
-                                new long[] {1, 2},
-                                new long[] {3, 4}
-                            };
+                            return new[] {new long[] {1, 2}, new long[] {3, 4}};
                         }
 
                         if (i % 3 == 1)
                         {
-                            return new[]
-                            {
-                                null,
-                                null,
-                                new long[] {13, 14},
-                                null,
-                                new long[] {15, 16}
-                            };
+                            return new[] {null, null, new long[] {13, 14}, null, new long[] {15, 16}};
                         }
 
-                        return new long[]?[]
-                        {
-                            null
-                        };
+                        return new long[]?[] {null};
                     }).ToArray(),
                     NullCount = (NumRows / 3 + 1) * 4 - 1,
                     NumValues = (NumRows / 3 + 1) * 8,
@@ -899,29 +854,15 @@ namespace ParquetSharp.Test
                     {
                         if (i % 3 == 0)
                         {
-                            return new[]
-                            {
-                                new long?[] {1, 2},
-                                new long?[] {3, null}
-                            };
+                            return new[] {new long?[] {1, 2}, new long?[] {3, null}};
                         }
 
                         if (i % 3 == 1)
                         {
-                            return new[]
-                            {
-                                null,
-                                null,
-                                new long?[] {13, 14},
-                                null,
-                                new long?[] {null, 16}
-                            };
+                            return new[] {null, null, new long?[] {13, 14}, null, new long?[] {null, 16}};
                         }
 
-                        return new long?[]?[]
-                        {
-                            null
-                        };
+                        return new long?[]?[] {null};
                     }).ToArray(),
                     NullCount = (NumRows / 3 + 1) * 6 - 1,
                     NumValues = (NumRows / 3 + 1) * 6,
@@ -936,28 +877,15 @@ namespace ParquetSharp.Test
                     {
                         if (i % 3 == 0)
                         {
-                            return new[]
-                            {
-                                BitConverter.GetBytes(3 * i),
-                                BitConverter.GetBytes(2 * i)
-                            };
+                            return new[] {BitConverter.GetBytes(3 * i), BitConverter.GetBytes(2 * i)};
                         }
 
                         if (i % 3 == 1)
                         {
-                            return new[]
-                            {
-                                null,
-                                null,
-                                BitConverter.GetBytes(i),
-                                null
-                            };
+                            return new[] {null, null, BitConverter.GetBytes(i), null};
                         }
 
-                        return new byte[]?[]
-                        {
-                            null
-                        };
+                        return new byte[]?[] {null};
                     }).ToArray(),
                     NullCount = (NumRows / 3 + 1) * 4 - 1,
                     NumValues = (NumRows / 3 + 1) * 3,

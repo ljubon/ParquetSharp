@@ -3,8 +3,7 @@ using System.Collections.Generic;
 
 namespace ParquetSharp
 {
-    public abstract class LogicalColumnStream<TSource> : IDisposable
-        where TSource : class, IDisposable
+    public abstract class LogicalColumnStream<TSource> : IDisposable where TSource : class, IDisposable
     {
         protected LogicalColumnStream(TSource source, ColumnDescriptor descriptor, Type elementType, Type physicalType, int bufferLength)
         {
@@ -35,6 +34,7 @@ namespace ParquetSharp
             {
                 schemaNodes.Add(n);
             }
+
             schemaNodes.RemoveAt(schemaNodes.Count - 1); // we don't need the schema root
             schemaNodes.Reverse(); // root to leaf
             return schemaNodes;

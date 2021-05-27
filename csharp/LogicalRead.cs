@@ -7,10 +7,10 @@ namespace ParquetSharp
     /// <summary>
     /// Parquet physical types to C# types read conversion logic.
     /// </summary>
-    internal static class LogicalRead<TLogical, TPhysical>
-        where TPhysical : unmanaged
+    internal static class LogicalRead<TLogical, TPhysical> where TPhysical : unmanaged
     {
         public delegate long DirectReader(ColumnReader<TPhysical> columnReader, Span<TLogical> destination);
+
         public delegate void Converter(ReadOnlySpan<TPhysical> source, ReadOnlySpan<short> defLevels, Span<TLogical> destination, short nullLevel);
 
         public static DirectReader? GetDirectReader()
@@ -26,12 +26,7 @@ namespace ParquetSharp
                 return read;
             }
 
-            if (typeof(TLogical) == typeof(bool) ||
-                typeof(TLogical) == typeof(int) ||
-                typeof(TLogical) == typeof(long) ||
-                typeof(TLogical) == typeof(Int96) ||
-                typeof(TLogical) == typeof(float) ||
-                typeof(TLogical) == typeof(double))
+            if (typeof(TLogical) == typeof(bool) || typeof(TLogical) == typeof(int) || typeof(TLogical) == typeof(long) || typeof(TLogical) == typeof(Int96) || typeof(TLogical) == typeof(float) || typeof(TLogical) == typeof(double))
             {
                 return (DirectReader) (Delegate) (LogicalRead<TPhysical, TPhysical>.DirectReader) Read;
             }
@@ -51,22 +46,12 @@ namespace ParquetSharp
 
         public static Converter GetConverter(LogicalType logicalType, int scale, ByteArrayReaderCache<TPhysical, TLogical> byteArrayCache)
         {
-            if (typeof(TLogical) == typeof(bool) ||
-                typeof(TLogical) == typeof(int) ||
-                typeof(TLogical) == typeof(long) ||
-                typeof(TLogical) == typeof(Int96) ||
-                typeof(TLogical) == typeof(float) ||
-                typeof(TLogical) == typeof(double))
+            if (typeof(TLogical) == typeof(bool) || typeof(TLogical) == typeof(int) || typeof(TLogical) == typeof(long) || typeof(TLogical) == typeof(Int96) || typeof(TLogical) == typeof(float) || typeof(TLogical) == typeof(double))
             {
                 return (Converter) (Delegate) (LogicalRead<TPhysical, TPhysical>.Converter) ((s, dl, d, nl) => ConvertNative(s, d));
             }
 
-            if (typeof(TLogical) == typeof(bool?) ||
-                typeof(TLogical) == typeof(int?) ||
-                typeof(TLogical) == typeof(long?) ||
-                typeof(TLogical) == typeof(Int96?) ||
-                typeof(TLogical) == typeof(float?) ||
-                typeof(TLogical) == typeof(double?))
+            if (typeof(TLogical) == typeof(bool?) || typeof(TLogical) == typeof(int?) || typeof(TLogical) == typeof(long?) || typeof(TLogical) == typeof(Int96?) || typeof(TLogical) == typeof(float?) || typeof(TLogical) == typeof(double?))
             {
                 return (Converter) (Delegate) (LogicalRead<TPhysical?, TPhysical>.Converter) ConvertNative;
             }
@@ -234,9 +219,7 @@ namespace ParquetSharp
 
             if (typeof(TLogical) == typeof(string))
             {
-                return byteArrayCache.IsUsable
-                    ? (Converter) (Delegate) (LogicalRead<string?, ByteArray>.Converter) ((s, dl, d, nl) => ConvertString(s, dl, d, nl, (ByteArrayReaderCache<ByteArray, string>) (object) byteArrayCache)) 
-                    : (Converter) (Delegate) (LogicalRead<string?, ByteArray>.Converter) ConvertString;
+                return byteArrayCache.IsUsable ? (Converter) (Delegate) (LogicalRead<string?, ByteArray>.Converter) ((s, dl, d, nl) => ConvertString(s, dl, d, nl, (ByteArrayReaderCache<ByteArray, string>) (object) byteArrayCache)) : (Converter) (Delegate) (LogicalRead<string?, ByteArray>.Converter) ConvertString;
             }
 
             if (typeof(TLogical) == typeof(byte[]))
@@ -247,13 +230,13 @@ namespace ParquetSharp
                 //return byteArrayCache.IsUsable
                 //    ? (Converter) (Delegate) (LogicalRead<byte[], ByteArray>.Converter) ((s, dl, d, nl) => ConvertByteArray(s, dl, d, nl, (ByteArrayReaderCache<ByteArray, byte[]>) (object) byteArrayCache))
                 //    : (Converter) (Delegate) (LogicalRead<byte[], ByteArray>.Converter) ConvertByteArray;
-                
+
                 return (Converter) (Delegate) (LogicalRead<byte[]?, ByteArray>.Converter) ConvertByteArray;
             }
 
             throw new NotSupportedException($"unsupported logical system type {typeof(TLogical)} with logical type {logicalType}");
         }
-        
+
         private static void ConvertNative<TValue>(ReadOnlySpan<TValue> source, Span<TValue> destination) where TValue : unmanaged
         {
             source.CopyTo(destination);
@@ -362,7 +345,7 @@ namespace ParquetSharp
                 destination[i] = defLevels[i] == nullLevel ? default(Guid?) : LogicalRead.ToUuid(source[src++]);
             }
         }
-        
+
         private static void ConvertDateTimeMicros(ReadOnlySpan<long> source, Span<DateTime> destination)
         {
             var dst = MemoryMarshal.Cast<DateTime, long>(destination);
@@ -384,7 +367,7 @@ namespace ParquetSharp
         private static void ConvertDateTimeMillis(ReadOnlySpan<long> source, Span<DateTime> destination)
         {
             var dst = MemoryMarshal.Cast<DateTime, long>(destination);
-            
+
             for (int i = 0; i < destination.Length; ++i)
             {
                 dst[i] = LogicalRead.ToDateTimeMillisTicks(source[i]);
@@ -468,7 +451,7 @@ namespace ParquetSharp
                 // The cache does not appear to be valid anymore.
                 byteArrayCache.Clear();
             }
-                
+
             return byteArrayCache.Add(byteArray, LogicalRead.ToString(byteArray));
         }
 
@@ -480,7 +463,7 @@ namespace ParquetSharp
 
             var cached = new ReadOnlySpan<byte>((void*) byteArray.Pointer, byteArray.Length);
             var expected = buffer.AsSpan(0, byteCount);
-            
+
             return cached.SequenceEqual(expected);
         }
     }
@@ -514,8 +497,7 @@ namespace ParquetSharp
                 short c = (short) (p[6] << 8 | p[7]);
 
                 return new Guid(a, b, c, p[8], p[9], p[10], p[11], p[12], p[13], p[14], p[15]);
-            }
-            else
+            } else
             {
                 // ReSharper disable once PossibleNullReferenceException
                 int a = p[0] | p[1] << 8 | p[2] << 16 | p[3] << 24;
@@ -565,9 +547,7 @@ namespace ParquetSharp
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe string ToString(ByteArray byteArray)
         {
-            return byteArray.Length == 0
-                ? string.Empty
-                : System.Text.Encoding.UTF8.GetString((byte*)byteArray.Pointer, byteArray.Length);
+            return byteArray.Length == 0 ? string.Empty : System.Text.Encoding.UTF8.GetString((byte*) byteArray.Pointer, byteArray.Length);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

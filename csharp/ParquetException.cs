@@ -1,4 +1,3 @@
-
 using System;
 
 namespace ParquetSharp
@@ -8,8 +7,7 @@ namespace ParquetSharp
     /// </summary>
     public sealed class ParquetException : Exception
     {
-        public ParquetException(string type, string message)
-            : base($"{type} (message: '{message}')")
+        public ParquetException(string type, string message) : base($"{type} (message: '{message}')")
         {
         }
     }

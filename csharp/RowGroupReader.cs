@@ -17,9 +17,7 @@ namespace ParquetSharp
 
         public RowGroupMetaData MetaData => _metaData ??= new RowGroupMetaData(ExceptionInfo.Return<IntPtr>(_handle, RowGroupReader_Metadata));
 
-        public ColumnReader Column(int i) => ColumnReader.Create(
-            ExceptionInfo.Return<int, IntPtr>(_handle, i, RowGroupReader_Column),
-            MetaData.GetColumnChunkMetaData(i));
+        public ColumnReader Column(int i) => ColumnReader.Create(ExceptionInfo.Return<int, IntPtr>(_handle, i, RowGroupReader_Column), MetaData.GetColumnChunkMetaData(i));
 
         [DllImport(ParquetDll.Name)]
         private static extern void RowGroupReader_Free(IntPtr rowGroupReader);

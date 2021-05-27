@@ -10,8 +10,7 @@ namespace ParquetSharp.Test
             _range = range ?? (0, values.Length);
         }
 
-        public Array OnColumnWriter<TValue>(ColumnWriter<TValue> columnWriter) 
-            where TValue : unmanaged
+        public Array OnColumnWriter<TValue>(ColumnWriter<TValue> columnWriter) where TValue : unmanaged
         {
             var values = (TValue[]) _values;
             var span = values.AsSpan(_range.begin, _range.end - _range.begin);

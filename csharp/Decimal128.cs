@@ -23,10 +23,9 @@ namespace ParquetSharp
             try
             {
                 unscaled = decimal.Truncate(value * multiplier);
-            }
-            catch (OverflowException exception)
+            } catch (OverflowException exception)
             {
-                throw new OverflowException($"value {value:E} is too large for decimal scale {Math.Log10((double)multiplier)}", exception);
+                throw new OverflowException($"value {value:E} is too large for decimal scale {Math.Log10((double) multiplier)}", exception);
             }
 
             var src = (uint*) &unscaled;

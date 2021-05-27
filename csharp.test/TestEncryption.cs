@@ -136,7 +136,7 @@ namespace ParquetSharp.Test
             {
                 using var fileReader = new ParquetFileReader(input);
                 using var groupReader = fileReader.RowGroup(0);
-                    
+
                 var numRows = (int) groupReader.MetaData.NumRows;
 
                 using (var idReader = groupReader.Column(0).LogicalReader<int>())
@@ -159,9 +159,7 @@ namespace ParquetSharp.Test
         {
             using var builder = new FileEncryptionPropertiesBuilder(Key0);
 
-            return builder
-                .FooterKeyMetadata("NotGoingToWork")
-                .Build();
+            return builder.FooterKeyMetadata("NotGoingToWork").Build();
         }
 
         private static FileEncryptionProperties CreateEncryptAllSeparateKeysProperties()
@@ -170,14 +168,7 @@ namespace ParquetSharp.Test
             using var col0 = new ColumnEncryptionPropertiesBuilder("Id");
             using var col1 = new ColumnEncryptionPropertiesBuilder("Value");
 
-            return builder
-                .FooterKeyMetadata("Key0")
-                .EncryptedColumns(new[]
-                {
-                    col0.Key(Key1).KeyMetadata("Key1").Build(),
-                    col1.Key(Key2).KeyMetadata("Key2").Build()
-                })
-                .Build();
+            return builder.FooterKeyMetadata("Key0").EncryptedColumns(new[] {col0.Key(Key1).KeyMetadata("Key1").Build(), col1.Key(Key2).KeyMetadata("Key2").Build()}).Build();
         }
 
         private static FileEncryptionProperties CreateEncryptJustColumnsProperties()
@@ -185,31 +176,16 @@ namespace ParquetSharp.Test
             using var builder = new FileEncryptionPropertiesBuilder(Key0);
             using var col1 = new ColumnEncryptionPropertiesBuilder("Value");
             using var col0 = new ColumnEncryptionPropertiesBuilder("Id");
-            
-            return builder
-                .FooterKeyMetadata("Key0")
-                .SetPlaintextFooter()
-                .EncryptedColumns(new[]
-                {
-                    col0.Key(Key1).KeyMetadata("Key1").Build(),
-                    col1.Key(Key2).KeyMetadata("Key2").Build()
-                })
-                .Build();
+
+            return builder.FooterKeyMetadata("Key0").SetPlaintextFooter().EncryptedColumns(new[] {col0.Key(Key1).KeyMetadata("Key1").Build(), col1.Key(Key2).KeyMetadata("Key2").Build()}).Build();
         }
 
         private static FileEncryptionProperties CreateEncryptJustOneColumnProperties()
         {
             using var builder = new FileEncryptionPropertiesBuilder(Key0);
             using var col1 = new ColumnEncryptionPropertiesBuilder("Value");
-            
-            return builder
-                .FooterKeyMetadata("Key0")
-                .SetPlaintextFooter()
-                .EncryptedColumns(new[]
-                {
-                    col1.Key(Key2).KeyMetadata("Key2").Build()
-                })
-                .Build();
+
+            return builder.FooterKeyMetadata("Key0").SetPlaintextFooter().EncryptedColumns(new[] {col1.Key(Key2).KeyMetadata("Key2").Build()}).Build();
         }
 
         // Decrypt Properties
@@ -217,25 +193,18 @@ namespace ParquetSharp.Test
         private static FileDecryptionProperties CreateDecryptAllSameKeyProperties()
         {
             using var builder = new FileDecryptionPropertiesBuilder();
-            
-            return builder
-                .FooterKey(Key0)
-                .Build();
+
+            return builder.FooterKey(Key0).Build();
         }
 
         private static FileDecryptionProperties CreateDecryptWithKeyRetrieverProperties()
         {
             using var builder = new FileDecryptionPropertiesBuilder();
-            
-            return builder
-                .KeyRetriever(new TestRetriever())
-                .Build();
+
+            return builder.KeyRetriever(new TestRetriever()).Build();
         }
 
-        private static void AssertEncryptionRoundtrip(
-            Func<FileEncryptionProperties?> createFileEncryptionProperties,
-            Func<FileDecryptionProperties?> createFileDecryptionProperties, 
-            Action<RowGroupMetaData>? onGroupReader = null)
+        private static void AssertEncryptionRoundtrip(Func<FileEncryptionProperties?> createFileEncryptionProperties, Func<FileDecryptionProperties?> createFileDecryptionProperties, Action<RowGroupMetaData>? onGroupReader = null)
         {
             using var buffer = new ResizableBuffer();
 
@@ -257,7 +226,7 @@ namespace ParquetSharp.Test
             using var writerProperties = CreateWriterProperties(fileEncryptionProperties);
             using var fileWriter = new ParquetFileWriter(output, Columns, writerProperties);
             using var groupWriter = fileWriter.AppendRowGroup();
-            
+
             using (var idWriter = groupWriter.NextColumn().LogicalWriter<int>())
             {
                 idWriter.WriteBatch(Ids);
@@ -274,7 +243,7 @@ namespace ParquetSharp.Test
             using var readerProperties = CreateReaderProperties(fileDecryptionProperties);
             using var fileReader = new ParquetFileReader(input, readerProperties);
             using var groupReader = fileReader.RowGroup(0);
-            
+
             var metaData = groupReader.MetaData;
             var numRows = (int) metaData.NumRows;
 
@@ -294,11 +263,8 @@ namespace ParquetSharp.Test
         private static WriterProperties CreateWriterProperties(FileEncryptionProperties? fileEncryptionProperties)
         {
             using var builder = new WriterPropertiesBuilder();
-            
-            return builder
-                .Compression(Compression.Snappy)
-                .Encryption(fileEncryptionProperties)
-                .Build();
+
+            return builder.Compression(Compression.Snappy).Encryption(fileEncryptionProperties).Build();
         }
 
         private static ReaderProperties CreateReaderProperties(FileDecryptionProperties? fileDecryptionProperties)
@@ -314,10 +280,14 @@ namespace ParquetSharp.Test
             {
                 switch (keyMetadata)
                 {
-                    case "Key0": return Key0;
-                    case "Key1": return Key1;
-                    case "Key2": return Key2;
-                    default: throw new KeyNotFoundException($"'{keyMetadata}' metadata does not match any encryption key");
+                    case "Key0":
+                        return Key0;
+                    case "Key1":
+                        return Key1;
+                    case "Key2":
+                        return Key2;
+                    default:
+                        throw new KeyNotFoundException($"'{keyMetadata}' metadata does not match any encryption key");
                 }
             }
         }
@@ -326,11 +296,7 @@ namespace ParquetSharp.Test
         private static readonly byte[] Key1 = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
         private static readonly byte[] Key2 = {2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17};
 
-        public static readonly Column[] Columns =
-        {
-            new Column<int>("Id"), 
-            new Column<float>("Value")
-        };
+        public static readonly Column[] Columns = {new Column<int>("Id"), new Column<float>("Value")};
 
         public static readonly int[] Ids = {1, 2, 3, 5, 7, 8, 13};
         public static readonly float[] Values = {3.14f, 1.27f, 42.0f, 10.6f, 9.81f, 2.71f, -1f};

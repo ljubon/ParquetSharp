@@ -9,13 +9,11 @@ namespace ParquetSharp
     [StructLayout(LayoutKind.Sequential)]
     public readonly struct Date : IEquatable<Date>, IComparable<Date>
     {
-        public Date(int year, int month, int day)
-            : this(new DateTime(year, month, day))
+        public Date(int year, int month, int day) : this(new DateTime(year, month, day))
         {
         }
 
-        public Date(DateTime dateTime)
-            : this((int) ((dateTime.Ticks - BaseDateTimeTicks) / TimeSpan.TicksPerDay))
+        public Date(DateTime dateTime) : this((int) ((dateTime.Ticks - BaseDateTimeTicks) / TimeSpan.TicksPerDay))
         {
         }
 

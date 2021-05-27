@@ -42,7 +42,7 @@ namespace ParquetSharp.Test
         {
             var schema = CreateSchema(expectedColumns);
             var writerProperties = CreateWriterProperties(expectedColumns, useDictionaryEncoding);
-            var keyValueMetadata = new Dictionary<string, string> { { "case", "Test" }, { "Awesome", "true" } };
+            var keyValueMetadata = new Dictionary<string, string> {{"case", "Test"}, {"Awesome", "true"}};
 
             using var buffer = new ResizableBuffer();
 
@@ -73,7 +73,7 @@ namespace ParquetSharp.Test
 
             var schema = CreateSchema(expectedColumns);
             var writerProperties = CreateWriterProperties(expectedColumns, useDictionaryEncoding);
-            var keyValueMetadata = new Dictionary<string, string> { { "case", "Test" }, { "Awesome", "true" } };
+            var keyValueMetadata = new Dictionary<string, string> {{"case", "Test"}, {"Awesome", "true"}};
 
             using var buffer = new ResizableBuffer();
 
@@ -117,7 +117,7 @@ namespace ParquetSharp.Test
             using var fileMetaData = fileReader.FileMetaData;
 
             var numRows = expectedColumns.First().Values.Length;
-            
+
             Assert.AreEqual("parquet-cpp version 1.5.1-SNAPSHOT", fileMetaData.CreatedBy);
             Assert.AreEqual(new Dictionary<string, string> {{"case", "Test"}, {"Awesome", "true"}}, fileMetaData.KeyValueMetadata);
             Assert.AreEqual(expectedColumns.Length, fileMetaData.NumColumns);
@@ -152,20 +152,16 @@ namespace ParquetSharp.Test
                 Assert.AreEqual(expected.TypePrecision, descr.TypePrecision);
                 Assert.AreEqual(expected.TypeScale, descr.TypeScale);
 
-                Assert.AreEqual(
-                    expected.Encodings.Where(e => useDictionaryEncoding || e != Encoding.PlainDictionary).ToArray(), 
-                    chunkMetaData.Encodings.Distinct().ToArray());
+                Assert.AreEqual(expected.Encodings.Where(e => useDictionaryEncoding || e != Encoding.PlainDictionary).ToArray(), chunkMetaData.Encodings.Distinct().ToArray());
 
                 Assert.AreEqual(expected.Compression, chunkMetaData.Compression);
                 Assert.AreEqual(expected.Values, columnReader.Apply(new PhysicalValueGetter(chunkMetaData.NumValues)).values);
             }
         }
-        
+
         private static GroupNode CreateSchema(ExpectedColumn[] expectedColumns)
         {
-            var fields = expectedColumns
-                .Select(f => new PrimitiveNode(f.Name, Repetition.Required, LogicalType.None(), f.PhysicalType))
-                .ToArray();
+            var fields = expectedColumns.Select(f => new PrimitiveNode(f.Name, Repetition.Required, LogicalType.None(), f.PhysicalType)).ToArray();
 
             return new GroupNode("schema", Repetition.Required, fields);
         }
@@ -189,47 +185,7 @@ namespace ParquetSharp.Test
 
         private static ExpectedColumn[] CreateExpectedColumns(int numRows)
         {
-            return new[]
-            {
-                new ExpectedColumn
-                {
-                    Name = "boolean_field",
-                    Encodings = new[] {Encoding.Plain, Encoding.Rle},
-                    PhysicalType = PhysicalType.Boolean,
-                    Values = Enumerable.Range(0, numRows).Select(i => i % 3 == 0).ToArray()
-                },
-                new ExpectedColumn
-                {
-                    Name = "int32_field",
-                    PhysicalType = PhysicalType.Int32,
-                    Values = Enumerable.Range(0, numRows).ToArray()
-                },
-                new ExpectedColumn
-                {
-                    Name = "int64_field",
-                    PhysicalType = PhysicalType.Int64,
-                    Values = Enumerable.Range(0, numRows).Select(i => (long) i * i).ToArray()
-                },
-                new ExpectedColumn
-                {
-                    Name = "int96_field",
-                    PhysicalType = PhysicalType.Int96,
-                    SortOrder = SortOrder.Unknown,
-                    Values = Enumerable.Range(0, numRows).Select(i => new Int96(i, i*2, i*3)).ToArray()
-                },
-                new ExpectedColumn
-                {
-                    Name = "float_field",
-                    PhysicalType = PhysicalType.Float,
-                    Values = Enumerable.Range(0, numRows).Select(i => (float) Math.Sqrt(i)).ToArray()
-                },
-                new ExpectedColumn
-                {
-                    Name = "double_field",
-                    PhysicalType = PhysicalType.Double,
-                    Values = Enumerable.Range(0, numRows).Select(i => i * Math.PI).ToArray()
-                }
-            };
+            return new[] {new ExpectedColumn {Name = "boolean_field", Encodings = new[] {Encoding.Plain, Encoding.Rle}, PhysicalType = PhysicalType.Boolean, Values = Enumerable.Range(0, numRows).Select(i => i % 3 == 0).ToArray()}, new ExpectedColumn {Name = "int32_field", PhysicalType = PhysicalType.Int32, Values = Enumerable.Range(0, numRows).ToArray()}, new ExpectedColumn {Name = "int64_field", PhysicalType = PhysicalType.Int64, Values = Enumerable.Range(0, numRows).Select(i => (long) i * i).ToArray()}, new ExpectedColumn {Name = "int96_field", PhysicalType = PhysicalType.Int96, SortOrder = SortOrder.Unknown, Values = Enumerable.Range(0, numRows).Select(i => new Int96(i, i * 2, i * 3)).ToArray()}, new ExpectedColumn {Name = "float_field", PhysicalType = PhysicalType.Float, Values = Enumerable.Range(0, numRows).Select(i => (float) Math.Sqrt(i)).ToArray()}, new ExpectedColumn {Name = "double_field", PhysicalType = PhysicalType.Double, Values = Enumerable.Range(0, numRows).Select(i => i * Math.PI).ToArray()}};
         }
 
         private sealed class ExpectedColumn

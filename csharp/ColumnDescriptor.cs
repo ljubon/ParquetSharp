@@ -35,7 +35,6 @@ namespace ParquetSharp
             var types = GetSystemTypes();
             var visitorApply = VisitorCache.GetOrAdd((types.physicalType, types.logicalType, types.elementType, typeof(TReturn)), t =>
             {
-
                 var iface = typeof(IColumnDescriptorVisitor<TReturn>);
                 var genericMethod = iface.GetMethod(nameof(visitor.OnColumnDescriptor));
                 if (genericMethod == null)
@@ -208,8 +207,7 @@ namespace ParquetSharp
         [DllImport(ParquetDll.Name)]
         private static extern IntPtr ColumnDescriptor_Type_Scale(IntPtr columnDescriptor, out int typeScale);
 
-        private static readonly ConcurrentDictionary<(Type physicalType, Type logicalType, Type elementType, Type returnType), Delegate> VisitorCache =
-            new ConcurrentDictionary<(Type physicalType, Type logicalType, Type elementType, Type returnType), Delegate>();
+        private static readonly ConcurrentDictionary<(Type physicalType, Type logicalType, Type elementType, Type returnType), Delegate> VisitorCache = new ConcurrentDictionary<(Type physicalType, Type logicalType, Type elementType, Type returnType), Delegate>();
 
         private readonly IntPtr _handle;
     }

@@ -8,62 +8,38 @@ namespace ParquetSharp
 {
     public sealed class ParquetFileWriter : IDisposable
     {
-        public ParquetFileWriter(
-            string path, 
-            Column[] columns, 
-            Compression compression = Compression.Snappy, 
-            IReadOnlyDictionary<string, string>? keyValueMetadata = null)
+        public ParquetFileWriter(string path, Column[] columns, Compression compression = Compression.Snappy, IReadOnlyDictionary<string, string>? keyValueMetadata = null)
         {
             using var schema = Column.CreateSchemaNode(columns);
             using var writerProperties = CreateWriterProperties(compression);
             _handle = CreateParquetFileWriter(path, schema, writerProperties, keyValueMetadata);
         }
 
-        public ParquetFileWriter(
-            OutputStream outputStream, 
-            Column[] columns, 
-            Compression compression = Compression.Snappy, 
-            IReadOnlyDictionary<string, string>? keyValueMetadata = null)
+        public ParquetFileWriter(OutputStream outputStream, Column[] columns, Compression compression = Compression.Snappy, IReadOnlyDictionary<string, string>? keyValueMetadata = null)
         {
             using var schema = Column.CreateSchemaNode(columns);
             using var writerProperties = CreateWriterProperties(compression);
             _handle = CreateParquetFileWriter(outputStream, schema, writerProperties, keyValueMetadata);
         }
 
-        public ParquetFileWriter(
-            string path, 
-            Column[] columns,
-            WriterProperties writerProperties,
-            IReadOnlyDictionary<string, string>? keyValueMetadata = null)
+        public ParquetFileWriter(string path, Column[] columns, WriterProperties writerProperties, IReadOnlyDictionary<string, string>? keyValueMetadata = null)
         {
             using var schema = Column.CreateSchemaNode(columns);
             _handle = CreateParquetFileWriter(path, schema, writerProperties, keyValueMetadata);
         }
 
-        public ParquetFileWriter(
-            OutputStream outputStream, 
-            Column[] columns,
-            WriterProperties writerProperties,
-            IReadOnlyDictionary<string, string>? keyValueMetadata = null)
+        public ParquetFileWriter(OutputStream outputStream, Column[] columns, WriterProperties writerProperties, IReadOnlyDictionary<string, string>? keyValueMetadata = null)
         {
             using var schema = Column.CreateSchemaNode(columns);
             _handle = CreateParquetFileWriter(outputStream, schema, writerProperties, keyValueMetadata);
         }
 
-        public ParquetFileWriter(
-            string path, 
-            GroupNode schema, 
-            WriterProperties writerProperties, 
-            IReadOnlyDictionary<string, string>? keyValueMetadata = null)
+        public ParquetFileWriter(string path, GroupNode schema, WriterProperties writerProperties, IReadOnlyDictionary<string, string>? keyValueMetadata = null)
         {
             _handle = CreateParquetFileWriter(path, schema, writerProperties, keyValueMetadata);
         }
 
-        public ParquetFileWriter(
-            OutputStream outputStream, 
-            GroupNode schema, 
-            WriterProperties writerProperties,
-            IReadOnlyDictionary<string, string>? keyValueMetadata = null)
+        public ParquetFileWriter(OutputStream outputStream, GroupNode schema, WriterProperties writerProperties, IReadOnlyDictionary<string, string>? keyValueMetadata = null)
         {
             _handle = CreateParquetFileWriter(outputStream, schema, writerProperties, keyValueMetadata);
         }
@@ -139,11 +115,7 @@ namespace ParquetSharp
             }
         }
 
-        private static ParquetHandle CreateParquetFileWriter(
-            string path, 
-            GroupNode schema, 
-            WriterProperties writerProperties,
-            IReadOnlyDictionary<string, string>? keyValueMetadata)
+        private static ParquetHandle CreateParquetFileWriter(string path, GroupNode schema, WriterProperties writerProperties, IReadOnlyDictionary<string, string>? keyValueMetadata)
         {
             if (path == null) throw new ArgumentNullException(nameof(path));
             if (schema == null) throw new ArgumentNullException(nameof(schema));
@@ -151,8 +123,7 @@ namespace ParquetSharp
 
             using (var kvm = keyValueMetadata == null ? null : new KeyValueMetadata(keyValueMetadata))
             {
-                ExceptionInfo.Check(ParquetFileWriter_OpenFile(
-                    path, schema.Handle.IntPtr, writerProperties.Handle.IntPtr, kvm?.Handle.IntPtr ?? IntPtr.Zero, out var writer));
+                ExceptionInfo.Check(ParquetFileWriter_OpenFile(path, schema.Handle.IntPtr, writerProperties.Handle.IntPtr, kvm?.Handle.IntPtr ?? IntPtr.Zero, out var writer));
 
                 // Keep alive schema and writerProperties until this point, otherwise the GC might kick in while we're in OpenFile().
                 GC.KeepAlive(schema);
@@ -162,11 +133,7 @@ namespace ParquetSharp
             }
         }
 
-        private static ParquetHandle CreateParquetFileWriter(
-            OutputStream outputStream, 
-            GroupNode schema, 
-            WriterProperties writerProperties,
-            IReadOnlyDictionary<string, string>? keyValueMetadata)
+        private static ParquetHandle CreateParquetFileWriter(OutputStream outputStream, GroupNode schema, WriterProperties writerProperties, IReadOnlyDictionary<string, string>? keyValueMetadata)
         {
             if (outputStream == null) throw new ArgumentNullException(nameof(outputStream));
             if (outputStream.Handle == null) throw new ArgumentNullException(nameof(outputStream.Handle));
@@ -175,8 +142,7 @@ namespace ParquetSharp
 
             using (var kvm = keyValueMetadata == null ? null : new KeyValueMetadata(keyValueMetadata))
             {
-                ExceptionInfo.Check(ParquetFileWriter_Open(
-                    outputStream.Handle.IntPtr, schema.Handle.IntPtr, writerProperties.Handle.IntPtr, kvm?.Handle.IntPtr ?? IntPtr.Zero, out var writer));
+                ExceptionInfo.Check(ParquetFileWriter_Open(outputStream.Handle.IntPtr, schema.Handle.IntPtr, writerProperties.Handle.IntPtr, kvm?.Handle.IntPtr ?? IntPtr.Zero, out var writer));
 
                 // Keep alive schema and writerProperties until this point, otherwise the GC might kick in while we're in Open().
                 GC.KeepAlive(schema);

@@ -9,16 +9,12 @@ namespace ParquetSharp
     /// Cache duplicate ByteArray / FixedByteArray values when reading and converting them to their logical form.
     /// This is particularly useful when reading a lot of duplicate strings.
     /// </summary>
-    internal sealed class ByteArrayReaderCache<TPhysical, TLogical>
-        where TPhysical : unmanaged
+    internal sealed class ByteArrayReaderCache<TPhysical, TLogical> where TPhysical : unmanaged
     {
         public ByteArrayReaderCache(ColumnChunkMetaData columnChunkMetaData)
         {
             // If dictionary encoding is used, it's worth caching repeated values for byte arrays.
-            _map = columnChunkMetaData.Encodings.Any(e => e == Encoding.PlainDictionary || e == Encoding.RleDictionary) &&
-                   (typeof(TPhysical) == typeof(ByteArray) || typeof(TPhysical) == typeof(FixedLenByteArray))
-                ? new Dictionary<TPhysical, TLogical>()
-                : null;
+            _map = columnChunkMetaData.Encodings.Any(e => e == Encoding.PlainDictionary || e == Encoding.RleDictionary) && (typeof(TPhysical) == typeof(ByteArray) || typeof(TPhysical) == typeof(FixedLenByteArray)) ? new Dictionary<TPhysical, TLogical>() : null;
 
             _scratch = new byte[64];
         }

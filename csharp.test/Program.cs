@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Runtime.ExceptionServices;
 
 namespace ParquetSharp.Test
@@ -39,9 +38,7 @@ namespace ParquetSharp.Test
                 AppDomain.CurrentDomain.UnhandledException -= UncaughtExceptionHandler;
 
                 return 0;
-            }
-
-            catch (Exception exception)
+            } catch (Exception exception)
             {
                 var colour = Console.ForegroundColor;
 

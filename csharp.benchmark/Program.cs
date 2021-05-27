@@ -16,23 +16,13 @@ namespace ParquetSharp.Benchmark
             {
                 Console.WriteLine("Working directory: {0}", Environment.CurrentDirectory);
 
-                var config = DefaultConfig
-                    .Instance
-                    .AddColumn(new SizeInBytesColumn())
-                    .WithOptions(ConfigOptions.Default | ConfigOptions.StopOnFirstError)
-                    ;
+                var config = DefaultConfig.Instance.AddColumn(new SizeInBytesColumn()).WithOptions(ConfigOptions.Default | ConfigOptions.StopOnFirstError);
 
-                var summaries = BenchmarkRunner.Run(new[]
-                {
-                    BenchmarkConverter.TypeToBenchmarks(typeof(DecimalRead), config),
-                    BenchmarkConverter.TypeToBenchmarks(typeof(DecimalWrite), config),
-                    BenchmarkConverter.TypeToBenchmarks(typeof(FloatTimeSeriesRead), config),
-                    BenchmarkConverter.TypeToBenchmarks(typeof(FloatTimeSeriesWrite), config)
-                });
+                var summaries = BenchmarkRunner.Run(new[] {BenchmarkConverter.TypeToBenchmarks(typeof(DecimalRead), config), BenchmarkConverter.TypeToBenchmarks(typeof(DecimalWrite), config), BenchmarkConverter.TypeToBenchmarks(typeof(FloatTimeSeriesRead), config), BenchmarkConverter.TypeToBenchmarks(typeof(FloatTimeSeriesWrite), config)});
 
                 // Re-print to the console all the summaries. 
                 var logger = ConsoleLogger.Default;
-                
+
                 logger.WriteLine();
 
                 foreach (var summary in summaries)
@@ -44,9 +34,7 @@ namespace ParquetSharp.Benchmark
                 }
 
                 return 0;
-            }
-
-            catch (Exception exception)
+            } catch (Exception exception)
             {
                 var colour = Console.ForegroundColor;
 

@@ -9,8 +9,7 @@ namespace ParquetSharp.IO
     /// </summary>
     public sealed class ManagedOutputStream : OutputStream
     {
-        public ManagedOutputStream(Stream stream)
-            : this(stream, false)
+        public ManagedOutputStream(Stream stream) : this(stream, false)
         {
         }
 
@@ -27,12 +26,7 @@ namespace ParquetSharp.IO
             Handle = Create(_write, _tell, _flush, _close, _closed);
         }
 
-        private static ParquetHandle Create(
-            WriteDelegate write,
-            TellDelegate tell,
-            FlushDelegate flush,
-            CloseDelegate close,
-            ClosedDelegate closed)
+        private static ParquetHandle Create(WriteDelegate write, TellDelegate tell, FlushDelegate flush, CloseDelegate close, ClosedDelegate closed)
         {
             ExceptionInfo.Check(ManagedOutputStream_Create(write, tell, flush, close, closed, out var handle));
             return new ParquetHandle(handle, OutputStream_Free);
@@ -66,8 +60,7 @@ namespace ParquetSharp.IO
 
                 exception = _exceptionMessage = null;
                 return 0;
-            }
-            catch (Exception error)
+            } catch (Exception error)
             {
                 return HandleException(error, out exception);
             }
@@ -80,8 +73,7 @@ namespace ParquetSharp.IO
                 Marshal.WriteInt64(position, _stream.Position);
                 exception = _exceptionMessage = null;
                 return 0;
-            }
-            catch (Exception error)
+            } catch (Exception error)
             {
                 return HandleException(error, out exception);
             }
@@ -94,8 +86,7 @@ namespace ParquetSharp.IO
                 _stream.Flush();
                 exception = _exceptionMessage = null;
                 return 0;
-            }
-            catch (Exception error)
+            } catch (Exception error)
             {
                 return HandleException(error, out exception);
             }
@@ -112,8 +103,7 @@ namespace ParquetSharp.IO
 
                 exception = null;
                 return 0;
-            }
-            catch (Exception error)
+            } catch (Exception error)
             {
                 return HandleException(error, out exception);
             }
@@ -124,8 +114,7 @@ namespace ParquetSharp.IO
             try
             {
                 return !_stream.CanWrite;
-            }
-            catch
+            } catch
             {
                 return true;
             }
@@ -138,6 +127,7 @@ namespace ParquetSharp.IO
                 exception = _exceptionMessage = null;
                 return 1;
             }
+
             if (error is IOException)
             {
                 exception = _exceptionMessage = error.ToString();
@@ -149,19 +139,17 @@ namespace ParquetSharp.IO
         }
 
         [DllImport(ParquetDll.Name)]
-        private static extern IntPtr ManagedOutputStream_Create(
-            WriteDelegate write,
-            TellDelegate tell,
-            FlushDelegate flush,
-            CloseDelegate close,
-            ClosedDelegate closed,
-            out IntPtr outputStream);
+        private static extern IntPtr ManagedOutputStream_Create(WriteDelegate write, TellDelegate tell, FlushDelegate flush, CloseDelegate close, ClosedDelegate closed, out IntPtr outputStream);
 
 
         private delegate byte WriteDelegate(IntPtr buffer, long nbyte, [MarshalAs(UnmanagedType.LPStr)] out string? exception);
+
         private delegate byte TellDelegate(IntPtr position, [MarshalAs(UnmanagedType.LPStr)] out string? exception);
+
         private delegate byte FlushDelegate([MarshalAs(UnmanagedType.LPStr)] out string? exception);
+
         private delegate byte CloseDelegate([MarshalAs(UnmanagedType.LPStr)] out string? exception);
+
         private delegate bool ClosedDelegate();
 
         private readonly Stream _stream;
@@ -173,6 +161,7 @@ namespace ParquetSharp.IO
         private readonly TellDelegate _tell;
         private readonly FlushDelegate _flush;
         private readonly CloseDelegate _close;
+
         private readonly ClosedDelegate _closed;
         // ReSharper restore PrivateFieldCanBeConvertedToLocalVariable
 

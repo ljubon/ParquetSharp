@@ -19,22 +19,11 @@ namespace ParquetSharp.Test
             // Test the various properties exposed by ParquetFileWriter.
 
             using var writerPropertiesBuilder = new WriterPropertiesBuilder();
-            using var writerProperties = writerPropertiesBuilder
-                .Compression(Compression.Zstd)
-                .DisableDictionary()
-                .CreatedBy("Some crazy unit test")
-                .Build();
+            using var writerProperties = writerPropertiesBuilder.Compression(Compression.Zstd).DisableDictionary().CreatedBy("Some crazy unit test").Build();
 
-            var columns = new Column[]
-            {
-                new Column<int>("Index"), 
-                new Column<float>("Value")
-            };
+            var columns = new Column[] {new Column<int>("Index"), new Column<float>("Value")};
 
-            var kvm = (IReadOnlyDictionary<string, string>) new Dictionary<string, string>
-            {
-                {"some key", "some value"}
-            };
+            var kvm = (IReadOnlyDictionary<string, string>) new Dictionary<string, string> {{"some key", "some value"}};
 
             using var buffer = new ResizableBuffer();
             using var outStream = new BufferOutputStream(buffer);
@@ -62,7 +51,7 @@ namespace ParquetSharp.Test
 
                 using (var writer = groupWriter.NextColumn().LogicalWriter<int>())
                 {
-                    writer.WriteBatch(new[] { 1, 2, 3, 4, 5, 6 });
+                    writer.WriteBatch(new[] {1, 2, 3, 4, 5, 6});
                 }
 
                 Assert.AreEqual(0, fileWriter.NumRows);
@@ -71,7 +60,7 @@ namespace ParquetSharp.Test
 
                 using (var writer = groupWriter.NextColumn().LogicalWriter<float>())
                 {
-                    writer.WriteBatch(new[] { 1f, 2f, 3f, 4f, 5f, 6f });
+                    writer.WriteBatch(new[] {1f, 2f, 3f, 4f, 5f, 6f});
                 }
 
                 Assert.AreEqual(0, fileWriter.NumRows);
@@ -117,7 +106,7 @@ namespace ParquetSharp.Test
                 using var buffer = new ResizableBuffer();
                 using var outStream = new BufferOutputStream(buffer);
                 using var fileWriter = new ParquetFileWriter(outStream, new Column[] {new Column<int>("Index"), new Column<float>("Value")});
-                
+
                 throw new Exception("this is the expected message");
             });
 
@@ -147,7 +136,7 @@ namespace ParquetSharp.Test
             {
                 using var buffer = new ResizableBuffer();
                 using var outStream = new BufferOutputStream(buffer);
-                using var fileWriter = new ParquetFileWriter(outStream, new Column[] { new Column<int>("Index"), new Column<float>("Value") });
+                using var fileWriter = new ParquetFileWriter(outStream, new Column[] {new Column<int>("Index"), new Column<float>("Value")});
                 using var groupWriter = fileWriter.AppendRowGroup();
 
                 using (var writer = groupWriter.NextColumn().LogicalWriter<int>())
@@ -250,12 +239,7 @@ namespace ParquetSharp.Test
         {
             void WriteFile()
             {
-                var schema = new Column[]
-                {
-                    new Column<DateTime>("Col1"),
-                    new Column<int>("Col2"),
-                    new Column<float>("Col3")
-                };
+                var schema = new Column[] {new Column<DateTime>("Col1"), new Column<int>("Col2"), new Column<float>("Col3")};
 
                 const int numRowGroups = 7;
                 const int rowsPerRowGroup = 21;
@@ -304,6 +288,5 @@ namespace ParquetSharp.Test
 
             Task.WaitAll(running);
         }
-
     }
 }

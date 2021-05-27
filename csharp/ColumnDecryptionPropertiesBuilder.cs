@@ -9,13 +9,11 @@ namespace ParquetSharp
     /// </summary>
     public sealed class ColumnDecryptionPropertiesBuilder : IDisposable
     {
-        public ColumnDecryptionPropertiesBuilder(string columnName)
-            : this(Make(columnName))
+        public ColumnDecryptionPropertiesBuilder(string columnName) : this(Make(columnName))
         {
         }
 
-        public ColumnDecryptionPropertiesBuilder(ColumnPath columnPath)
-            : this(Make(columnPath))
+        public ColumnDecryptionPropertiesBuilder(ColumnPath columnPath) : this(Make(columnPath))
         {
         }
 
