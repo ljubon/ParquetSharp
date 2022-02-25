@@ -22,7 +22,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Setup .NET Core SDK
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v2
         with:
           dotnet-version: ${{ env.dotnet_5_version }}
       - name: Code formating check
@@ -142,11 +142,11 @@ jobs:
 
     # .NET Core Setup (and also MSBuild for Windows).
     - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v2
       with:
         dotnet-version: ${{ env.dotnet_3_version }}
     - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v2
       with:
         dotnet-version: ${{ env.dotnet_5_version }}
     - name: Pin .NET Core SDK
@@ -190,7 +190,7 @@ jobs:
         mkdir bin
         cp -rv artifacts/*-native-library/* bin/
     - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v2
       with:
         dotnet-version: ${{ env.dotnet_5_version }}
     - name: Pin .NET Core SDK
@@ -255,7 +255,7 @@ jobs:
         echo "::set-output name=version::${!version}"
         echo "::set-output name=framework::$framework"
     - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v2
       with:
         dotnet-version: ${{ steps.dotnet.outputs.version }}
     - name: Pin .NET Core SDK
