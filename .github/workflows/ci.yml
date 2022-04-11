@@ -182,7 +182,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Download all artifacts
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         path: artifacts
     - name: Copy native ParquetSharp libraries
@@ -229,7 +229,7 @@ jobs:
       run: echo "::set-output name=version::$((Select-Xml -Path ./csharp/ParquetSharp.csproj -XPath '/Project/PropertyGroup/Version/text()').node.Value)"
       shell: pwsh
     - name: Download NuGet artifact
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: nuget-package
         path: nuget
@@ -311,7 +311,7 @@ jobs:
         }
         echo "::set-output name=version::$version"
     - name: Download NuGet artifact
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: nuget-package
         path: nuget
