@@ -127,7 +127,7 @@ jobs:
       run: ./vcpkg_windows.bat
     - name: Upload vcpkg arrow logs
       if: steps.get-cached-vcpkg.outputs.cache-hit != 'true' && (success() || failure())
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: ${{ steps.vcpkg-triplet.outputs.triplet }}-vcpkg-arrow-logs
         path: build/vcpkg.${{ steps.vcpkg-triplet.outputs.triplet }}/buildtrees/arrow/*.log
@@ -167,7 +167,7 @@ jobs:
         dotnet build csharp.benchmark --configuration=Release -p:OSArchitecture=${{ matrix.arch }}
         dotnet build csharp.test --configuration=Release -p:OSArchitecture=${{ matrix.arch }}
     - name: Upload native ParquetSharp library
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: ${{ steps.vcpkg-triplet.outputs.triplet }}-native-library
         path: bin
@@ -198,7 +198,7 @@ jobs:
     - name: Build NuGet package
       run: dotnet build csharp --configuration=Release
     - name: Upload NuGet artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: nuget-package
         path: nuget
