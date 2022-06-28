@@ -166,6 +166,15 @@ jobs:
       run: |
         dotnet build csharp.benchmark --configuration=Release -p:OSArchitecture=${{ matrix.arch }}
         dotnet build csharp.test --configuration=Release -p:OSArchitecture=${{ matrix.arch }}
+    - name: Scan
+      if: runner.os == 'Linux'
+      continue-on-error: false
+      uses: tidelift/alignment-action@main
+      env:
+        TIDELIFT_API_KEY: ${{ secrets.TIDELIFT_API_KEY }}
+        TIDELIFT_ORGANIZATION: ${{ secrets.TIDELIFT_ORGANIZATION }}
+        TIDELIFT_PROJECT: ${{ secrets.TIDELIFT_PROJECT }}
+        
     - name: Upload native ParquetSharp library
       uses: actions/upload-artifact@v2
       with:
