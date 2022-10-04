@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3.1.0
       - name: Setup .NET Core SDK
         uses: actions/setup-dotnet@v1
         with:
@@ -57,7 +57,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3.1.0
 
     # Find out which vcpkg version we are using.
     - name: Resolve vcpkg version
@@ -180,7 +180,7 @@ jobs:
     needs: build-native
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3.1.0
     - name: Download all artifacts
       uses: actions/download-artifact@v2
       with:
@@ -223,7 +223,7 @@ jobs:
     needs: build-nuget
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3.1.0
     - name: Get version
       id: get-version
       run: echo "::set-output name=version::$((Select-Xml -Path ./csharp/ParquetSharp.csproj -XPath '/Project/PropertyGroup/Version/text()').node.Value)"
@@ -298,7 +298,7 @@ jobs:
     needs: all-required-checks-done
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3.1.0
     - name: Check version
       id: check-version
       shell: pwsh
